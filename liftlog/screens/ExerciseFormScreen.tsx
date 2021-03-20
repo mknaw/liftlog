@@ -5,7 +5,9 @@ import * as FileSystem from 'expo-file-system';
 
 import { RecordSetScreenProps } from '../types';
 import RepSlider from '../components/RepSlider';
-import { insert, selectAll } from '../db/Database';
+
+import { Lift } from '../db/entities/Lift';
+import { createConnection, Connection } from "typeorm";
 
 // TODO validation - React-hooks-form ?
 
@@ -50,7 +52,7 @@ export default class ExerciseFormScreen extends React.Component {
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
-            insert('exercises', this.state);
+            // insert
             this.props.navigation.navigate('ThisWorkout');
           }}>
           <Text style={styles.text}>Add</Text>
@@ -72,7 +74,7 @@ class LiftPicker extends React.Component {
   }
 
   async componentDidMount() {
-    selectAll('lifts').then((lifts) => {
+    Lift.find().then(lifts => {
       let firstLift = lifts[0].id;
       this.setState({
         isLoading: false,

@@ -3,13 +3,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 
+import { RootStackParamList } from '../types';
+import LinkingConfiguration from './LinkingConfiguration';
+
+import HomeScreen from '../screens/HomeScreen';
+import WorkoutsScreen from '../screens/WorkoutsScreen';
 import ThisWorkoutScreen from '../screens/ThisWorkoutScreen';
 import ExerciseFormScreen from '../screens/ExerciseFormScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import RecordSetScreen from '../screens/RecordSetScreen';
-import { RootStackParamList } from '../types';
-// import BottomTabNavigator from './BottomTabNavigator';
-import LinkingConfiguration from './LinkingConfiguration';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -29,7 +31,9 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator initialRouteName="ThisWorkout" screenOptions={{ headerShown: true }}>
+    <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: true }}>
+      <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'LiftLog' }} />
+      <Stack.Screen name="Workouts" component={WorkoutsScreen} options={{ title: 'My Workouts' }} />
       <Stack.Screen name="ThisWorkout" component={ThisWorkoutScreen} options={{ title: 'This Workout' }} />
       <Stack.Screen name="ExerciseForm" component={ExerciseFormScreen} options={{ title: 'Add Exercise' }} />
       <Stack.Screen name="RecordSet" component={RecordSetScreen} options={{ title: 'Record Set' }} />

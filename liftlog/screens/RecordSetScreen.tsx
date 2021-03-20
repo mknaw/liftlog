@@ -4,7 +4,6 @@ import * as FileSystem from 'expo-file-system';
 
 import { RecordSetScreenProps } from '../types';
 import RepSlider from '../components/RepSlider';
-import { openDatabase } from '../db/Database';
 
 export default function RecordSetScreen({ route, navigation }) {
 

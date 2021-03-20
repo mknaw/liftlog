@@ -1,19 +1,12 @@
 
 export type RootStackParamList = {
   Root: undefined;
+  Home: undefined;
+  Workouts: undefined;
   ThisWorkout: undefined;
   ExerciseForm: undefined;
-  RecordSet: {
-    liftName: string,
-    weightGoal: number,
-    repGoal: number,
-  };
+  RecordSet: RecordSetScreenProps,
   NotFound: undefined;
-};
-
-export type BottomTabParamList = {
-  RecordSet: undefined;
-  ThisWorkout: undefined;
 };
 
 export type RecordSetParamList = {
@@ -25,6 +18,7 @@ export type ThisWorkoutParamList = {
 };
 
 export type RecordSetScreenProps = {
-  liftName: string;
-  setGoal: number;
+  liftName: string,
+  weightGoal: number,
+  repGoal: number,
 };
