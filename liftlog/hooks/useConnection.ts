@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { Connection, createConnection } from 'typeorm';
 
-import { Exercise } from '../db/entities/Exercise';
-import { Lift } from '../db/entities/Lift';
-import { Workout } from '../db/entities/Workout';
+import { Exercise, Lift, Workout } from '../db/entities/Entities';
 
 import { CreateLiftsTable1616335747077 } from '../db/migrations/1616335747077-CreateLiftsTable';
 

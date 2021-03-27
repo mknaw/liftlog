@@ -6,8 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import WorkoutRow from '../components/WorkoutRow';
 import { RootStackParamList } from '../types';
 
-import { Lift } from '../db/entities/Lift';
-import { Exercise } from '../db/entities/Exercise';
+import { Exercise, Lift } from '../db/entities/Entities';
 
 type ThisWorkoutNavigationProp = StackNavigationProp<
   RootStackParamList,

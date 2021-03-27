@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { Lift } from '../entities/Lift';
+import { Lift } from '../entities/Entities';
 
 const liftNames = [
   'Bench Press',

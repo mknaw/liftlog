@@ -6,7 +6,7 @@ import * as FileSystem from 'expo-file-system';
 import { RecordSetScreenProps } from '../types';
 import RepSlider from '../components/RepSlider';
 
-import { Lift } from '../db/entities/Lift';
+import { Lift } from '../db/entities/Entities';
 import { createConnection, Connection } from "typeorm";
 
 // TODO validation - React-hooks-form ?
