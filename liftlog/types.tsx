@@ -3,6 +3,7 @@ export type RootStackParamList = {
   Root: undefined;
   Home: undefined;
   Workouts: undefined;
+  WorkoutForm: undefined;
   ThisWorkout: undefined;
   ExerciseForm: undefined;
   RecordSet: RecordSetScreenProps,

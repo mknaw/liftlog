@@ -1,13 +1,11 @@
 import React from 'react';
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import * as FileSystem from 'expo-file-system';
 
 import { RecordSetScreenProps } from '../types';
 import RepSlider from '../components/RepSlider';
 
 import { Lift } from '../db/entities/Entities';
-import { createConnection, Connection } from "typeorm";
 
 // TODO validation - React-hooks-form ?
 

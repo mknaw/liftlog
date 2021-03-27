@@ -8,6 +8,7 @@ import LinkingConfiguration from './LinkingConfiguration';
 
 import HomeScreen from '../screens/HomeScreen';
 import WorkoutsScreen from '../screens/WorkoutsScreen';
+import WorkoutFormScreen from '../screens/WorkoutFormScreen';
 import ThisWorkoutScreen from '../screens/ThisWorkoutScreen';
 import ExerciseFormScreen from '../screens/ExerciseFormScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -34,6 +35,7 @@ function RootNavigator() {
     <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: true }}>
       <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'LiftLog' }} />
       <Stack.Screen name="Workouts" component={WorkoutsScreen} options={{ title: 'My Workouts' }} />
+      <Stack.Screen name="WorkoutForm" component={WorkoutFormScreen} options={{ title: 'Add Workout' }} />
       <Stack.Screen name="ThisWorkout" component={ThisWorkoutScreen} options={{ title: 'This Workout' }} />
       <Stack.Screen name="ExerciseForm" component={ExerciseFormScreen} options={{ title: 'Add Exercise' }} />
       <Stack.Screen name="RecordSet" component={RecordSetScreen} options={{ title: 'Record Set' }} />

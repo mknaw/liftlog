@@ -39,7 +39,7 @@ export default function ThisWorkoutScreen(props: Props) {
         <Row data={headers} style={styles.head} textStyle={styles.head_text} />
       </Table>
       <Button
-        title={'Add exercise'}
+        title='Add exercise'
         onPress={() => {
           navigation.navigate('ExerciseForm');
         }} />

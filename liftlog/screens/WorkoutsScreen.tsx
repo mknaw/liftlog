@@ -19,6 +19,11 @@ export default function WorkoutsScreen(props: Props) {
   return (
     <ScrollView style={styles.container}>
       <Text>Workouts go here...</Text>
+      <Button
+        title='Add workout'
+        onPress={() => {
+          navigation.navigate('WorkoutForm');
+        }} />
     </ScrollView>
   );
 }
