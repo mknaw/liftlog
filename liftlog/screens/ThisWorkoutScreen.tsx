@@ -2,15 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
 import { Button, ScrollView, StyleSheet } from 'react-native';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { Table, Row } from 'react-native-table-component';
 
 import WorkoutRow from '../components/WorkoutRow';
+import { Workout } from '../db/entities/Entities';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
-
-import { Lift, Program, Workout } from '../db/entities/Entities';
 
 type ThisWorkoutRouteProp = RouteProp<
   RootStackParamList,
@@ -27,7 +25,7 @@ type Props = {
   navigation: ThisWorkoutNavigationProp;
 };
 
-export default function ThisWorkoutScreen(props: Props) {
+const ThisWorkoutScreen: React.FC<Props> = (props: Props) => {
   const { route, navigation } = props;
   const { workoutId } = route.params;
 
@@ -35,18 +33,19 @@ export default function ThisWorkoutScreen(props: Props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const workout = await Workout.findOne(
-        workoutId, { relations: ['exercises', 'exercises.lift'] });
-      if (!workout) {
-        console.log('error');
+      const thisWorkout = await Workout.findOne(
+        workoutId, { relations: ['exercises', 'exercises.lift'] },
+      );
+      if (!thisWorkout) {
+        // TODO handle error?
         return;
       }
-      setWorkout(workout);
+      setWorkout(thisWorkout);
     };
     navigation.addListener('focus', () => {
       fetchData();
     });
-  }, []);
+  }, [navigation, workoutId]);
 
   const headers = ['Exercise', 'Weight', 'Rep Goal'];
 
@@ -55,25 +54,26 @@ export default function ThisWorkoutScreen(props: Props) {
   }
   return (
     <ScrollView style={styles.container}>
-      <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+      <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
         <Row data={headers} style={styles.head} textStyle={styles.head_text} />
-        {workout.exercises && workout.exercises.map((exercise, key) => (
+        {workout.exercises && workout.exercises.map((exercise) => (
           <WorkoutRow
-            key={key}
+            key={exercise.id}
             liftName={exercise.lift.name}
             weight={exercise.weight}
-            reps={exercise.reps} />
+            reps={exercise.reps}
+          />
         ))}
       </Table>
       <Button
         title='Add Exercise'
         onPress={() => {
-          navigation.navigate(
-            'ExerciseForm', { workoutId: workout.id });
-        }} />
+          navigation.navigate('ExerciseForm', { workoutId: workout.id });
+        }}
+      />
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -89,3 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default ThisWorkoutScreen;

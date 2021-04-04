@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Controller, useForm } from 'react-hook-form';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { useForm } from 'react-hook-form';
+import { Button, StyleSheet, View } from 'react-native';
 
 import LiftPicker from '../components/LiftPicker';
 import TextInputRow from '../components/TextInputRow';
 import { Exercise, Lift, Workout } from '../db/entities/Entities';
-import { BaseStyles, TextStyles } from '../styles';
-import { RecordSetScreenProps, RootStackParamList } from '../types';
+import { BaseStyles } from '../styles';
+import { RootStackParamList } from '../types';
 
 type ExerciseFormRouteProp = RouteProp<
   RootStackParamList,
@@ -35,8 +33,7 @@ type Inputs = {
   lift: number,
 };
 
-export default function ExerciseFormScreen(props: Props) {
-  const { route, navigation } = props;
+const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const { workoutId } = route.params;
 
   const { control, handleSubmit, errors } = useForm<Inputs>();
@@ -85,7 +82,8 @@ export default function ExerciseFormScreen(props: Props) {
       />
       <LiftPicker
         name='lift'
-        control={control} />
+        control={control}
+      />
       <Button
         title='Add Exercise'
         onPress={handleSubmit(async (data) => {
@@ -95,7 +93,7 @@ export default function ExerciseFormScreen(props: Props) {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -112,3 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default ExerciseFormScreen;

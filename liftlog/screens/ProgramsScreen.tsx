@@ -1,7 +1,12 @@
-import React, { Component, useEffect, useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useEffect, useState } from 'react';
 
-import { Button, ScrollView, StyleSheet, Text } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+} from 'react-native';
 
 import TextRow from '../components/TextRow';
 import { Program } from '../db/entities/Entities';
@@ -17,46 +22,40 @@ type Props = {
   navigation: ProgramsScreenNavigationProp;
 };
 
-export default function ProgramsScreen(props: Props) {
-  const { navigation } = props;
-  const [ programs, setPrograms ] = useState<Array<Program>>([]);
+const ProgramsScreen: React.FC<Props> = ({ navigation }: Props) => {
+  const [programs, setPrograms] = useState<Array<Program>>([]);
 
   useEffect(() => {
-    navigation.addListener('focus', () => {
-        Program.find().then(programs => {
-          setPrograms(programs);
-        });
-      }
-    );
-  }, []);
+    navigation.addListener('focus', async () => {
+      setPrograms(await Program.find());
+    });
+  }, [navigation]);
 
   return (
     <ScrollView style={styles.container}>
-      {programs ?
-        programs.map(program =>
+      {programs
+        ? programs.map((program) => (
           <TextRow
             key={program.id}
             onPress={() => {
-              navigation.navigate(
-                'ProgramBuilder',
-                { programId: program.id }
-              )}}
+              navigation.navigate('ProgramBuilder', { programId: program.id });
+            }}
           >
             { program.name }
           </TextRow>
-        ) : <Text>No programs yet</Text>
-      }
+        )) : <Text>No programs yet</Text>}
       <Button
         title='Add Program'
         onPress={() => navigation.navigate('ProgramForm')}
       />
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    ...BaseStyles.container
+    ...BaseStyles.container,
   },
 });
 
+export default ProgramsScreen;

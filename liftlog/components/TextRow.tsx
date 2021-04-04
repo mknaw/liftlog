@@ -1,17 +1,14 @@
-import React, { Component, useEffect, useState } from 'react';
+import React from 'react';
 
 import { StyleSheet, Text, View } from 'react-native';
 
-type TextProps = Text['props'];
+type Props = Text['props'];
 
-export default function TextRow(props: TextProps) {
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text} {...props} />
-    </View>
-  );
-}
+const TextRow: React.FC<Props> = (props: Props) => (
+  <View style={styles.container}>
+    <Text style={styles.text} {...props} />
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -25,3 +22,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default TextRow;

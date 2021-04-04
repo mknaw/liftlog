@@ -1,21 +1,17 @@
 import React from 'react';
 
-import { Controller, useForm } from 'react-hook-form';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import { useForm } from 'react-hook-form';
 import {
   Button,
   StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 
 import TextInputRow from '../components/TextInputRow';
+import { Program } from '../db/entities/Entities';
 import { BaseStyles, FormStyles } from '../styles';
 import { RootStackParamList } from '../types';
-import { Program } from '../db/entities/Entities';
 
 type ProgramFormScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -30,8 +26,13 @@ type Inputs = {
   name: string,
 };
 
-export default function ProgramFormScreen(props: Props) {
-  const { navigation } = props;
+async function newProgram(data: Inputs) {
+  const program = new Program();
+  program.name = data.name;
+  await program.save();
+}
+
+const ProgramFormScreen: React.FC<Props> = ({ navigation }: Props) => {
   // TODO nonempty + unique validation on name
   const { control, handleSubmit, errors } = useForm<Inputs>();
 
@@ -39,7 +40,7 @@ export default function ProgramFormScreen(props: Props) {
   const validation = async (name: string) => {
     const program = await Program.findOne({ name });
     return program === undefined ? true : 'Name must be unique';
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -49,9 +50,9 @@ export default function ProgramFormScreen(props: Props) {
         rules={{
           required: {
             value: true,
-            message: 'Program name required'
+            message: 'Program name required',
           },
-          validate: validation
+          validate: validation,
         }}
         errors={errors}
       />
@@ -64,21 +65,16 @@ export default function ProgramFormScreen(props: Props) {
       />
     </View>
   );
-}
-
-async function newProgram(data: Inputs) {
-  const program = new Program();
-  program.name = data.name;
-  await program.save();
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    ...BaseStyles.container
+    ...BaseStyles.container,
   },
   textInput: {
-    ...FormStyles.textInput
+    ...FormStyles.textInput,
   },
 });
 
+export default ProgramFormScreen;

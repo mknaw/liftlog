@@ -1,7 +1,12 @@
 import React from 'react';
 
 import { Control, Controller } from 'react-hook-form';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 import { Colors, FormStyles, TextStyles } from '../styles';
 import { TextUtils } from '../utils';
@@ -15,33 +20,35 @@ type Props = {
   errors?: Record<string, any>,
 };
 
-export default function TextInputRow(props: Props) {
-  const label = props.label ?
-    props.label : TextUtils.camelToTitle(props.name);
-  const { control, name, errors, rules } = props;
-
-  return (
-    <View style={styles.container}>
-      {errors && name in errors && (
-        <Text>{errors[name].message}</Text> 
+const TextInputRow: React.FC<Props> = ({
+  control,
+  name,
+  errors,
+  rules,
+  label = TextUtils.camelToTitle(name),
+}: Props) => (
+  <View style={styles.container}>
+    {errors && name in errors && (
+      <Text>{errors[name].message}</Text>
+    )}
+    <Text style={styles.label}>
+      { label }
+    </Text>
+    <Controller
+      name={name}
+      control={control}
+      defaultValue=''
+      rules={rules}
+      render={({ onChange, value }) => (
+        <TextInput
+          onChangeText={(text) => onChange(text)}
+          value={value}
+          style={styles.textInput}
+        />
       )}
-      <Text style={styles.label}>
-        { label }
-      </Text>
-      <Controller
-        name={name}
-        control={control}
-        defaultValue=''
-        rules={rules}
-        render={({ onChange, value }) => (
-          <TextInput
-            onChangeText={(text) => onChange(text)}
-            value={value}
-            style={styles.textInput} />
-          )} />
-    </View>
-  );
-}
+    />
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -53,12 +60,13 @@ const styles = StyleSheet.create({
   },
   label: {
     marginRight: 10,
-    ...TextStyles.medium
+    ...TextStyles.medium,
   },
   textInput: {
     flex: 1,
     ...TextStyles.medium,
-    ...FormStyles.textInput
+    ...FormStyles.textInput,
   },
 });
 
+export default TextInputRow;

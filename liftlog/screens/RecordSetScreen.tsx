@@ -1,38 +1,75 @@
-import React from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import * as FileSystem from 'expo-file-system';
+import React, { useEffect, useState } from 'react';
 
-import { BaseStyles, TextStyles } from '../styles';
-import { RecordSetScreenProps } from '../types';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+
 import RepSlider from '../components/RepSlider';
+import { Exercise } from '../db/entities/Entities';
+import { BaseStyles, TextStyles } from '../styles';
+import { RootStackParamList } from '../types';
 
-export default function RecordSetScreen({ route, navigation }) {
+type RecordSetRouteProp = RouteProp<
+  RootStackParamList,
+  'RecordSet'
+>;
 
-  // TODO Don't think this is how it is done
-  // Think this is related to incorrect use of `RecordSetScreen`
-  // in `WorkoutRow.tsx`
-  const { liftName } = route.params ? route.params : 'unknown';
-  const { weightGoal } = route.params ? route.params : 'unknown';
-  const { repGoal } = route.params ? route.params : 'unknown';
+type RecordSetNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'RecordSet'
+>;
 
-  const [setNumber, setSetNumber] = React.useState(1);
+type Props = {
+  route: RecordSetRouteProp;
+  navigation: RecordSetNavigationProp;
+};
+
+const RecordSetScreen: React.FC<Props> = ({ route, navigation }: Props) => {
+  const { exerciseId } = route.params;
+
+  const [exercise, setExercise] = useState<Exercise>();
+  const [setNumber, setSetNumber] = useState<number>(1);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setExercise(await Exercise.findOne(
+        exerciseId,
+        { relations: ['lift'] },
+      ));
+    };
+    fetchData();
+  }, [exerciseId]);
+
+  if (!exercise) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        { liftName } - { weightGoal } lbs.
+        {`${exercise.lift.name} - ${exercise.weight} lbs.`}
       </Text>
-      <Text style={styles.goal}>Goal: { repGoal }</Text>
       <Text style={styles.goal}>
-        Set: { setNumber }
+        {`Goal: ${exercise.reps}`}
       </Text>
-      <RepSlider repGoal={repGoal} />
+      <Text style={styles.goal}>
+        {`Set: ${setNumber}`}
+      </Text>
+      <RepSlider repGoal={exercise.reps} />
       <Button
         onPress={() => {
-          if ( setNumber > repGoal ) {
-            navigation.navigate('ThisWorkout');
+          if (setNumber > exercise.reps) {
+            navigation.navigate(
+              'ThisWorkout',
+              { workoutId: exercise.workout.id },
+            );
           } else {
-            setSetNumber( setNumber + 1 );
+            setSetNumber(setNumber + 1);
           }
         }}
         title='Record Set'
@@ -40,15 +77,15 @@ export default function RecordSetScreen({ route, navigation }) {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    ...BaseStyles.container
+    ...BaseStyles.container,
   },
   title: {
-    ...TextStyles.title
+    ...TextStyles.title,
   },
   goal: {
     fontSize: 20,
@@ -63,3 +100,5 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
+
+export default RecordSetScreen;

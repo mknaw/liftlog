@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import React from 'react';
 
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, ScrollView, StyleSheet } from 'react-native';
 
 import { BaseStyles } from '../styles';
@@ -15,21 +15,18 @@ type Props = {
   navigation: HomeScreenNavigationProp;
 };
 
-export default function HomeScreen(props: Props) {
-  const { navigation } = props;
-  return (
-    <ScrollView style={styles.container}>
-      <Button
-        title='My Programs'
-        onPress={() => navigation.navigate('Programs')}
-      />
-      <Button
-        title='Settings'
-        onPress={() => {}}
-      />
-    </ScrollView>
-  );
-}
+const HomeScreen: React.FC<Props> = ({ navigation }: Props) => (
+  <ScrollView style={styles.container}>
+    <Button
+      title='My Programs'
+      onPress={() => navigation.navigate('Programs')}
+    />
+    <Button
+      title='Settings'
+      onPress={() => {}}
+    />
+  </ScrollView>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -37,3 +34,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default HomeScreen;

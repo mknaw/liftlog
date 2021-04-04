@@ -2,17 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
 import {
   Alert,
   Button,
-  StyleSheet,
   Text,
-  View
+  View,
 } from 'react-native';
 
 import { Program, Workout } from '../db/entities/Entities';
-import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
 
 type ProgramBuilderRouteProp = RouteProp<
@@ -30,25 +27,30 @@ type Props = {
   navigation: ProgramBuilderNavigationProp;
 };
 
-export default function ProgramBuilderScreen(props: Props) {
-  const { route, navigation } = props;
+const ProgramBuilderScreen: React.FC<Props> = ({
+  route,
+  navigation,
+}: Props) => {
   const { programId } = route.params;
 
-  const [ program, setProgram ] = useState<Program>();
+  const [program, setProgram] = useState<Program>();
 
   useEffect(() => {
-    Program.findOne(programId, { relations: ['workouts'] }).then(program => {
-      setProgram(program);
+    navigation.addListener('focus', async () => {
+      setProgram(await Program.findOne(
+        programId,
+        { relations: ['workouts'] },
+      ));
     });
-  }, []);
+  }, [navigation, programId]);
 
   const onAddWorkoutPress = async () => {
     if (!program) return;
     const workout = new Workout();
     workout.program = program;
-    await workout.save()
-    navigation.navigate('ThisWorkout', { workoutId: workout.id })
-  }
+    await workout.save();
+    navigation.navigate('ThisWorkout', { workoutId: workout.id });
+  };
 
   const onDeletePress = async () => {
     Alert.alert(
@@ -67,8 +69,8 @@ export default function ProgramBuilderScreen(props: Props) {
           },
         },
       ],
-    )
-  }
+    );
+  };
 
   if (!program) {
     return null;
@@ -78,10 +80,13 @@ export default function ProgramBuilderScreen(props: Props) {
     <View>
       <Text>{program.name}</Text>
       {program.workouts && program.workouts.map((workout, key) => (
-        <Text key={key} onPress={() => {
-          navigation.navigate('ThisWorkout', { workoutId: workout.id })
-        }}>
-          Day { key + 1 }
+        <Text
+          key={workout.id}
+          onPress={() => {
+            navigation.navigate('ThisWorkout', { workoutId: workout.id });
+          }}
+        >
+          { `Day ${key + 1}` }
         </Text>
       ))}
       <Button
@@ -94,11 +99,6 @@ export default function ProgramBuilderScreen(props: Props) {
       />
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    ...BaseStyles.container,
-  },
-});
-
+export default ProgramBuilderScreen;

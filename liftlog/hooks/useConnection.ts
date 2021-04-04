@@ -3,7 +3,7 @@ import { Connection, createConnection } from 'typeorm';
 
 import { Exercise, Lift, Program, Workout } from '../db/entities/Entities';
 
-import { Initial1616335747077 } from '../db/migrations/001-Initial';
+import Initial1616335747077 from '../db/migrations/001-Initial';
 
 export default function useConnection() {
   const [connection, setConnection] = React.useState<Connection | null>(null);

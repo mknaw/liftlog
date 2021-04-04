@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import { Picker } from '@react-native-picker/picker';
 import { Control, Controller } from 'react-hook-form';
 import { StyleSheet, Text, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 
 import { Lift } from '../db/entities/Entities';
 
@@ -11,19 +11,16 @@ type Props = {
   name: string,
 };
 
-export default function LiftPicker(props: Props) {
-
-  const { control, name } = props;
-
+const LiftPicker: React.FC<Props> = ({ control, name }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [lifts, setLifts] = useState<Array<Lift>>([]);
   const [selectedLiftId, setSelectedLiftId] = useState<number>();
 
   useEffect(() => {
     const fetchData = async () => {
-      const lifts = await Lift.find();
-      setLifts(lifts);
-      setSelectedLiftId(lifts[0].id);
+      const fetchedLifts = await Lift.find();
+      setLifts(fetchedLifts);
+      setSelectedLiftId(fetchedLifts[0].id);
       setIsLoading(false);
     };
     fetchData();
@@ -42,23 +39,23 @@ export default function LiftPicker(props: Props) {
       name={name}
       control={control}
       defaultValue=''
-      render={({ onChange, value }) => (
+      render={({ onChange }) => (
         <Picker
           style={styles.picker}
-          selectedValue={ selectedLiftId }
-          onValueChange={liftId => {
-            onChange(liftId)
+          selectedValue={selectedLiftId}
+          onValueChange={(liftId) => {
+            onChange(liftId);
             setSelectedLiftId(Number(liftId));
-          }}>
-          {lifts.map((row, key) => {
-            return (
-              <Picker.Item label={row.name} value={row.id} key={key}/>
-            );
-          })}
+          }}
+        >
+          {lifts.map((row) => (
+            <Picker.Item label={row.name} value={row.id} key={row.id} />
+          ))}
         </Picker>
-      )} />
-  )
-}
+      )}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
   picker: {
@@ -75,3 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default LiftPicker;
