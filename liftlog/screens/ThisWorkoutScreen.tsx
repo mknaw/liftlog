@@ -47,7 +47,7 @@ const ThisWorkoutScreen: React.FC<Props> = (props: Props) => {
     });
   }, [navigation, workoutId]);
 
-  const headers = ['Exercise', 'Weight', 'Rep Goal'];
+  const headers = ['Exercise', 'Weight', 'Sets', 'Rep Goal'];
 
   if (!workout) {
     return null;
@@ -59,16 +59,17 @@ const ThisWorkoutScreen: React.FC<Props> = (props: Props) => {
         {workout.exercises && workout.exercises.map((exercise) => (
           <WorkoutRow
             key={exercise.id}
-            liftName={exercise.lift.name}
-            weight={exercise.weight}
-            reps={exercise.reps}
+            exercise={exercise}
           />
         ))}
       </Table>
       <Button
         title='Add Exercise'
         onPress={() => {
-          navigation.navigate('ExerciseForm', { workoutId: workout.id });
+          navigation.navigate(
+            'ExerciseForm',
+            { workoutId: workout.id },
+          );
         }}
       />
     </ScrollView>

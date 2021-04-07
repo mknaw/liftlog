@@ -18,6 +18,7 @@ const liftNames = [
 ];
 
 export default class Initial1616335747077 implements MigrationInterface {
+  // eslint-disable-next-line
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(new Table({
       name: 'program',
@@ -45,6 +46,11 @@ export default class Initial1616335747077 implements MigrationInterface {
           isPrimary: true,
           isGenerated: true,
           generationStrategy: 'increment',
+        },
+        {
+          name: 'nickname',
+          type: 'text',
+          isNullable: true,
         },
         {
           name: 'programId',
@@ -100,6 +106,10 @@ export default class Initial1616335747077 implements MigrationInterface {
           type: 'integer',
         },
         {
+          name: 'sets',
+          type: 'integer',
+        },
+        {
           name: 'workoutId',
           type: 'integer',
         },
@@ -123,6 +133,7 @@ export default class Initial1616335747077 implements MigrationInterface {
     }), true);
   }
 
+  // eslint-disable-next-line
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropTable('lift');
     await queryRunner.dropTable('workout');

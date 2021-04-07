@@ -38,7 +38,7 @@ const LiftPicker: React.FC<Props> = ({ control, name }: Props) => {
     <Controller
       name={name}
       control={control}
-      defaultValue=''
+      defaultValue={selectedLiftId}
       render={({ onChange }) => (
         <Picker
           style={styles.picker}

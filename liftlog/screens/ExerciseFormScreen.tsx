@@ -29,6 +29,7 @@ type Props = {
 type Inputs = {
   // TODO really all should be ints here
   weight: number,
+  sets: number,
   reps: number,
   lift: number,
 };
@@ -50,6 +51,7 @@ const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
     exercise.lift = lift;
     // TODO these should be coerced to number by input or hook-form
     exercise.weight = Number(data.weight);
+    exercise.sets = Number(data.sets);
     exercise.reps = Number(data.reps);
     await exercise.save();
   }
@@ -64,6 +66,18 @@ const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
             value: true,
             // TODO should just have a standard msg for all
             message: 'Weight goal required',
+          },
+        }}
+        errors={errors}
+      />
+      <TextInputRow
+        name='sets'
+        control={control}
+        rules={{
+          required: {
+            value: true,
+            // TODO should just have a standard msg for all
+            message: 'Set goal required',
           },
         }}
         errors={errors}

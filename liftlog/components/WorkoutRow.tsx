@@ -1,50 +1,49 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Row } from 'react-native-table-component';
 
+import { Exercise } from '../db/entities/Entities';
+
 export interface Props {
-  liftName: string;
-  weight: number;
-  reps: number;
-}
-//
-// TODO this pattern is ugly as fuck, surely there's a better way.
-export interface DeFactoProps extends Props {
-  // TODO not sure that `object` is really the right type here.
-  navigation: object;
+  exercise: Exercise;
 }
 
+const liftButton: React.FC<Props> = ({ exercise }: Props) => {
+  const navigation = useNavigation();
 
-const liftButton: React.FC<DeFactoProps> = (props: DeFactoProps) => {
-  const { navigation, liftName, weight, reps } = props;
   const onPress = () => {
     // TODO property `navigate` doesn't exist on `object`
-    navigation.navigate('RecordSet', {
-      // TODO should just pass exercises ID
-      liftName, weight, reps,
-    })
+    navigation.navigate(
+      'RecordSet',
+      { exerciseId: exercise.id },
+    );
   };
 
   return (
     <TouchableOpacity style={styles.btn} onPress={onPress}>
-      <Text style={styles.btnText}>{ liftName }</Text>
+      <Text style={styles.btnText}>{ exercise.lift.name }</Text>
     </TouchableOpacity>
   );
-}
+};
 
-function WorkoutRow(props: DeFactoProps) {
+const WorkoutRow: React.FC<Props> = ({ exercise }: Props) => {
   const rowData = [
-    liftButton(props),
-    props.weight,
-    props.reps,
+    liftButton({ exercise }),
+    exercise.weight,
+    exercise.sets,
+    exercise.reps,
   ];
 
   return (
-     <Row data={rowData} style={styles.cell} textStyle={styles.text} />
+    <Row
+      data={rowData}
+      style={styles.cell}
+      textStyle={styles.text}
+    />
   );
-}
+};
 
 const styles = StyleSheet.create({
   cell: {
@@ -67,8 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// Wrap with navigation and export
-export default function(props: Props) {
-  const navigation = useNavigation();
-  return <WorkoutRow {...props} navigation={navigation}/>;
-}
+export default WorkoutRow;

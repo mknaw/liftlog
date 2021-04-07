@@ -5,10 +5,10 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import {
   Alert,
   Button,
-  Text,
   View,
 } from 'react-native';
 
+import TextRow from '../components/TextRow';
 import { Program, Workout } from '../db/entities/Entities';
 import { RootStackParamList } from '../types';
 
@@ -37,10 +37,15 @@ const ProgramBuilderScreen: React.FC<Props> = ({
 
   useEffect(() => {
     navigation.addListener('focus', async () => {
-      setProgram(await Program.findOne(
+      const thisProgram = await Program.findOne(
         programId,
         { relations: ['workouts'] },
-      ));
+      );
+      if (!thisProgram) {
+        return;
+      }
+      setProgram(thisProgram);
+      navigation.setOptions({ title: thisProgram.name });
     });
   }, [navigation, programId]);
 
@@ -78,16 +83,15 @@ const ProgramBuilderScreen: React.FC<Props> = ({
 
   return (
     <View>
-      <Text>{program.name}</Text>
       {program.workouts && program.workouts.map((workout, key) => (
-        <Text
+        <TextRow
           key={workout.id}
           onPress={() => {
             navigation.navigate('ThisWorkout', { workoutId: workout.id });
           }}
         >
           { `Day ${key + 1}` }
-        </Text>
+        </TextRow>
       ))}
       <Button
         title='Add Workout'

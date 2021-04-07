@@ -26,6 +26,9 @@ export class Workout extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ nullable: true })
+  nickname: string;
+
   @OneToMany(type => Exercise, exercise => exercise.workout)
   exercises: Exercise[];
 
@@ -43,6 +46,9 @@ export class Exercise extends BaseEntity {
 
   @Column('int')
   reps: number;
+
+  @Column('int')
+  sets: number;
 
   @ManyToOne(type => Workout, workout => workout.exercises)
   workout: Workout;

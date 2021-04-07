@@ -1,11 +1,16 @@
 import * as React from 'react';
+
 import { Connection, createConnection } from 'typeorm';
 
-import { Exercise, Lift, Program, Workout } from '../db/entities/Entities';
-
+import {
+  Exercise,
+  Lift,
+  Program,
+  Workout,
+} from '../db/entities/Entities';
 import Initial1616335747077 from '../db/migrations/001-Initial';
 
-export default function useConnection() {
+export default function useConnection(): void {
   const [connection, setConnection] = React.useState<Connection | null>(null);
 
   const connect = React.useCallback(async () => {
@@ -13,6 +18,7 @@ export default function useConnection() {
     const createdConnection = await createConnection({
       type: 'expo',
       database: 'liftlog.db',
+      // eslint-disable-next-line
       driver: require('expo-sqlite'),
       // TODO how the fuck to get this to load all from dir
       entities: [Program, Workout, Exercise, Lift],
