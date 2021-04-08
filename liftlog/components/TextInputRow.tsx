@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Control, Controller } from 'react-hook-form';
 import {
+  KeyboardType,
   StyleSheet,
   Text,
   TextInput,
@@ -18,6 +19,8 @@ type Props = {
   rules?: Object,
   // TODO probably not orthodox but dunno enough about TS to do better
   errors?: Record<string, any>,
+  // TODO have to figure out how to get the enum from native props
+  keyboardType?: KeyboardType,
 };
 
 const TextInputRow: React.FC<Props> = ({
@@ -26,37 +29,51 @@ const TextInputRow: React.FC<Props> = ({
   errors,
   rules,
   label = TextUtils.camelToTitle(name),
+  keyboardType = 'default',
 }: Props) => (
   <View style={styles.container}>
     {errors && name in errors && (
-      <Text>{errors[name].message}</Text>
+      <Text style={styles.error}>
+        {errors[name].message}
+      </Text>
     )}
-    <Text style={styles.label}>
-      { label }
-    </Text>
-    <Controller
-      name={name}
-      control={control}
-      defaultValue=''
-      rules={rules}
-      render={({ onChange, value }) => (
-        <TextInput
-          onChangeText={(text) => onChange(text)}
-          value={value}
-          style={styles.textInput}
-        />
-      )}
-    />
+    <View style={styles.innerContainer}>
+      <Text style={styles.label}>
+        { label }
+      </Text>
+      <Controller
+        name={name}
+        control={control}
+        defaultValue=''
+        rules={rules}
+        render={({ onChange, value }) => (
+          <TextInput
+            onChangeText={(text) => onChange(text)}
+            value={value}
+            style={styles.textInput}
+            keyboardType={keyboardType}
+          />
+        )}
+      />
+    </View>
   </View>
 );
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     width: '100%',
     padding: 12,
     borderBottomColor: Colors.darkGray,
     borderBottomWidth: 1,
+  },
+  innerContainer: {
+    flexDirection: 'row',
+    width: '100%',
+  },
+  error: {
+    marginBottom: 4,
+    color: 'red',
   },
   label: {
     marginRight: 10,

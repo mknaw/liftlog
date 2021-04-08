@@ -1,3 +1,4 @@
+import { RegisterOptions } from 'react-hook-form';
 import { BaseEntity, FindConditions } from 'typeorm';
 
 export const validateUnique = async (
@@ -12,3 +13,17 @@ export const validateUnique = async (
     return program === undefined ? true : message;
   }
 );
+
+export const requiredRule = (field: string): RegisterOptions => ({
+  required: {
+    value: true,
+    message: `${field} is required`,
+  },
+});
+
+export const NumericValidationRule = {
+  pattern: {
+    value: /\d+/,
+    message: 'Please enter a number',
+  },
+};

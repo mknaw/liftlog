@@ -10,6 +10,7 @@ import TextInputRow from '../components/TextInputRow';
 import { Exercise, Lift, Workout } from '../db/entities/Entities';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
+import { FormUtils } from '../utils';
 
 type ExerciseFormRouteProp = RouteProp<
   RootStackParamList,
@@ -62,37 +63,55 @@ const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         name='weight'
         control={control}
         rules={{
-          required: {
-            value: true,
-            // TODO should just have a standard msg for all
-            message: 'Weight goal required',
+          ...FormUtils.requiredRule('Weight goal'),
+          min: {
+            value: 0,
+            message: 'Please enter some weight',
           },
+          max: {
+            value: 2000,
+            message: 'Really? Please enter less weight...',
+          },
+          ...FormUtils.NumericValidationRule,
         }}
         errors={errors}
+        keyboardType='numeric'
       />
       <TextInputRow
         name='sets'
         control={control}
         rules={{
-          required: {
-            value: true,
-            // TODO should just have a standard msg for all
-            message: 'Set goal required',
+          ...FormUtils.requiredRule('Set goal'),
+          min: {
+            value: 0,
+            message: 'Must do at least one set!',
           },
+          max: {
+            value: 0,
+            message: 'Please enter fewer sets',
+          },
+          ...FormUtils.NumericValidationRule,
         }}
         errors={errors}
+        keyboardType='numeric'
       />
       <TextInputRow
         name='reps'
         control={control}
         rules={{
-          required: {
-            value: true,
-            // TODO should just have a standard msg for all
-            message: 'Rep goal required',
+          ...FormUtils.requiredRule('Rep goal'),
+          min: {
+            value: 0,
+            message: 'Must do at least one rep!',
           },
+          max: {
+            value: 0,
+            message: 'Please enter fewer reps - this is not cardio...',
+          },
+          ...FormUtils.NumericValidationRule,
         }}
         errors={errors}
+        keyboardType='numeric'
       />
       <LiftPicker
         name='lift'
