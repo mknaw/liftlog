@@ -1,9 +1,9 @@
 export type RootStackParamList = {
   Root: undefined;
   Home: undefined;
-  Programs: undefined;
+  ProgramList: undefined;
   ProgramForm: undefined;
-  ProgramBuilder: { programId: number };
+  ProgramDetail: { programId: number };
   ThisWorkout: { workoutId: number };
   ExerciseForm: { workoutId: number };
   RecordSet: { exerciseId: number },

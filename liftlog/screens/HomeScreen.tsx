@@ -19,7 +19,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }: Props) => (
   <ScrollView style={styles.container}>
     <Button
       title='My Programs'
-      onPress={() => navigation.navigate('Programs')}
+      onPress={() => navigation.navigate('ProgramList')}
     />
     <Button
       title='Settings'

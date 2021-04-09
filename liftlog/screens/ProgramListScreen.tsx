@@ -13,16 +13,16 @@ import { Program } from '../db/entities/Entities';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
 
-type ProgramsScreenNavigationProp = StackNavigationProp<
+type ProgramListScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'Programs'
+  'ProgramList'
 >;
 
 type Props = {
-  navigation: ProgramsScreenNavigationProp;
+  navigation: ProgramListScreenNavigationProp;
 };
 
-const ProgramsScreen: React.FC<Props> = ({ navigation }: Props) => {
+const ProgramListScreen: React.FC<Props> = ({ navigation }: Props) => {
   const [programs, setPrograms] = useState<Array<Program>>([]);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const ProgramsScreen: React.FC<Props> = ({ navigation }: Props) => {
           <TextRow
             key={program.id}
             onPress={() => {
-              navigation.navigate('ProgramBuilder', { programId: program.id });
+              navigation.navigate('ProgramDetail', { programId: program.id });
             }}
           >
             { program.name }
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProgramsScreen;
+export default ProgramListScreen;

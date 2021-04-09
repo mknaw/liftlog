@@ -1,34 +1,41 @@
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
+
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { ColorSchemeName } from 'react-native';
 
+import ExerciseFormScreen from '../screens/ExerciseFormScreen';
+import HomeScreen from '../screens/HomeScreen';
+import NotFoundScreen from '../screens/NotFoundScreen';
+import ProgramDetailScreen from '../screens/ProgramDetailScreen';
+import ProgramFormScreen from '../screens/ProgramFormScreen';
+import ProgramListScreen from '../screens/ProgramListScreen';
+import RecordSetScreen from '../screens/RecordSetScreen';
+import ThisWorkoutScreen from '../screens/ThisWorkoutScreen';
 import { RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
-import HomeScreen from '../screens/HomeScreen';
-import ProgramsScreen from '../screens/ProgramsScreen';
-import ProgramFormScreen from '../screens/ProgramFormScreen';
-import ProgramBuilderScreen from '../screens/ProgramBuilderScreen';
-import ThisWorkoutScreen from '../screens/ThisWorkoutScreen';
-import ExerciseFormScreen from '../screens/ExerciseFormScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
-import RecordSetScreen from '../screens/RecordSetScreen';
-
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export default function Navigation({
+  colorScheme,
+}: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+    >
       <RootNavigator />
     </NavigationContainer>
   );
 }
 
-// A root stack navigator is often used for displaying modals on top of all other content
-// Read more here: https://reactnavigation.org/docs/modal
+// A root stack navigator is often used for displaying modals on top of all
+// other content. Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
@@ -43,8 +50,8 @@ function RootNavigator() {
         options={{ title: 'LiftLog' }}
       />
       <Stack.Screen
-        name='Programs'
-        component={ProgramsScreen}
+        name='ProgramList'
+        component={ProgramListScreen}
         options={{ title: 'My Programs' }}
       />
       <Stack.Screen
@@ -53,8 +60,8 @@ function RootNavigator() {
         options={{ title: 'Add Program' }}
       />
       <Stack.Screen
-        name='ProgramBuilder'
-        component={ProgramBuilderScreen}
+        name='ProgramDetail'
+        component={ProgramDetailScreen}
         options={{ title: 'Program Builder' }}
       />
       <Stack.Screen

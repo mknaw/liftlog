@@ -8,26 +8,27 @@ import {
   View,
 } from 'react-native';
 
-import TextRow from '../components/TextRow';
+import AccordionRow from '../components/AccordionRow';
+import WorkoutSummary from '../components/WorkoutSummary';
 import { Program, Workout } from '../db/entities/Entities';
 import { RootStackParamList } from '../types';
 
-type ProgramBuilderRouteProp = RouteProp<
+type ProgramDetailRouteProp = RouteProp<
   RootStackParamList,
-  'ProgramBuilder'
+  'ProgramDetail'
 >;
 
-type ProgramBuilderNavigationProp = StackNavigationProp<
+type ProgramDetailNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'ProgramBuilder'
+  'ProgramDetail'
 >;
 
 type Props = {
-  route: ProgramBuilderRouteProp;
-  navigation: ProgramBuilderNavigationProp;
+  route: ProgramDetailRouteProp;
+  navigation: ProgramDetailNavigationProp;
 };
 
-const ProgramBuilderScreen: React.FC<Props> = ({
+const ProgramDetailScreen: React.FC<Props> = ({
   route,
   navigation,
 }: Props) => {
@@ -84,14 +85,14 @@ const ProgramBuilderScreen: React.FC<Props> = ({
   return (
     <View>
       {program.workouts && program.workouts.map((workout, key) => (
-        <TextRow
+        <AccordionRow
           key={workout.id}
-          onPress={() => {
-            navigation.navigate('ThisWorkout', { workoutId: workout.id });
-          }}
+          accordionContent={(
+            <WorkoutSummary workout={workout} />
+          )}
         >
           { `Day ${key + 1}` }
-        </TextRow>
+        </AccordionRow>
       ))}
       <Button
         title='Add Workout'
@@ -105,4 +106,4 @@ const ProgramBuilderScreen: React.FC<Props> = ({
   );
 };
 
-export default ProgramBuilderScreen;
+export default ProgramDetailScreen;

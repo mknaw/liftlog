@@ -26,7 +26,7 @@ module.exports = {
     'max-len': ['error', { code: 80 }],
     'jsx-quotes': ['error', 'prefer-single'],
     'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': ['error', { variables: false }],
+    '@typescript-eslint/no-use-before-define': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
     'react/require-default-props': 'off',
     'import/extensions': [
