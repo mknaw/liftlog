@@ -7,13 +7,13 @@ module.exports = {
   ],
   extends: [
     'eslint:recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
     'airbnb',
     'airbnb/hooks',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   settings: {
     'import/resolver': {
@@ -29,6 +29,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
     'react/require-default-props': 'off',
+    'react/jsx-props-no-spreading': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',

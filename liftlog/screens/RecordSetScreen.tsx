@@ -65,8 +65,8 @@ const RecordSetScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         onPress={() => {
           if (setNumber > exercise.reps) {
             navigation.navigate(
-              'ThisWorkout',
-              { workoutId: exercise.workout.id },
+              'WorkoutDetail',
+              { entityId: exercise.workout.id },
             );
           } else {
             setSetNumber(setNumber + 1);

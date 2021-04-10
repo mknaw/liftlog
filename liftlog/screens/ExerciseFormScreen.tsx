@@ -87,7 +87,7 @@ const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
             message: 'Must do at least one set!',
           },
           max: {
-            value: 0,
+            value: 50,
             message: 'Please enter fewer sets',
           },
           ...FormUtils.NumericValidationRule,
@@ -105,7 +105,7 @@ const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
             message: 'Must do at least one rep!',
           },
           max: {
-            value: 0,
+            value: 100,
             message: 'Please enter fewer reps - this is not cardio...',
           },
           ...FormUtils.NumericValidationRule,

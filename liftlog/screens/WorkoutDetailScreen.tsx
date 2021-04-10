@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -7,56 +7,39 @@ import { Table, Row } from 'react-native-table-component';
 
 import WorkoutRow from '../components/WorkoutRow';
 import { Workout } from '../db/entities/Entities';
+import withFetchDetail from '../hocs/withFetchDetail';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
 
-type ThisWorkoutRouteProp = RouteProp<
+type WorkoutDetailRouteProp = RouteProp<
   RootStackParamList,
-  'ThisWorkout'
+  'WorkoutDetail'
 >;
 
-type ThisWorkoutNavigationProp = StackNavigationProp<
+type WorkoutDetailNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'ThisWorkout'
+  'WorkoutDetail'
 >;
 
 type Props = {
-  route: ThisWorkoutRouteProp;
-  navigation: ThisWorkoutNavigationProp;
+  route: WorkoutDetailRouteProp;
+  navigation: WorkoutDetailNavigationProp;
+  entity: Workout;
 };
 
-const ThisWorkoutScreen: React.FC<Props> = (props: Props) => {
-  const { route, navigation } = props;
-  const { workoutId } = route.params;
-
-  const [workout, setWorkout] = useState<Workout>();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const thisWorkout = await Workout.findOne(
-        workoutId, { relations: ['exercises', 'exercises.lift'] },
-      );
-      if (!thisWorkout) {
-        // TODO handle error?
-        return;
-      }
-      setWorkout(thisWorkout);
-    };
-    navigation.addListener('focus', () => {
-      fetchData();
-    });
-  }, [navigation, workoutId]);
+const WorkoutDetailScreen: React.FC<Props> = (props: Props) => {
+  const { navigation, entity } = props;
 
   const headers = ['Exercise', 'Weight', 'Sets', 'Rep Goal'];
 
-  if (!workout) {
+  if (!entity) {
     return null;
   }
   return (
     <ScrollView style={styles.container}>
       <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
         <Row data={headers} style={styles.head} textStyle={styles.head_text} />
-        {workout.exercises && workout.exercises.map((exercise) => (
+        {entity.exercises && entity.exercises.map((exercise) => (
           <WorkoutRow
             key={exercise.id}
             exercise={exercise}
@@ -68,7 +51,7 @@ const ThisWorkoutScreen: React.FC<Props> = (props: Props) => {
         onPress={() => {
           navigation.navigate(
             'ExerciseForm',
-            { workoutId: workout.id },
+            { workoutId: entity.id },
           );
         }}
       />
@@ -90,4 +73,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ThisWorkoutScreen;
+export default withFetchDetail(
+  WorkoutDetailScreen,
+  ({ route }: Props) => {
+    const { entityId } = route.params;
+    return Workout.findOne(
+      entityId, { relations: ['exercises', 'exercises.lift'] },
+    );
+  },
+);

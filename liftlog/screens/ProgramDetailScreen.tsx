@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -11,6 +11,7 @@ import {
 import AccordionRow from '../components/AccordionRow';
 import WorkoutSummary from '../components/WorkoutSummary';
 import { Program, Workout } from '../db/entities/Entities';
+import withFetchDetail from '../hocs/withFetchDetail';
 import { RootStackParamList } from '../types';
 
 type ProgramDetailRouteProp = RouteProp<
@@ -26,36 +27,29 @@ type ProgramDetailNavigationProp = StackNavigationProp<
 type Props = {
   route: ProgramDetailRouteProp;
   navigation: ProgramDetailNavigationProp;
+  entity: Program;
 };
 
 const ProgramDetailScreen: React.FC<Props> = ({
   route,
   navigation,
+  entity,
 }: Props) => {
-  const { programId } = route.params;
+  const { entityId } = route.params;
 
-  const [program, setProgram] = useState<Program>();
-
+  // setProgram(thisProgram);
   useEffect(() => {
-    navigation.addListener('focus', async () => {
-      const thisProgram = await Program.findOne(
-        programId,
-        { relations: ['workouts'] },
-      );
-      if (!thisProgram) {
-        return;
-      }
-      setProgram(thisProgram);
-      navigation.setOptions({ title: thisProgram.name });
-    });
-  }, [navigation, programId]);
+    if (entity) {
+      navigation.setOptions({ title: entity.name });
+    }
+  }, [navigation, entity]);
 
   const onAddWorkoutPress = async () => {
-    if (!program) return;
+    if (!entity) return;
     const workout = new Workout();
-    workout.program = program;
+    workout.program = entity;
     await workout.save();
-    navigation.navigate('ThisWorkout', { workoutId: workout.id });
+    navigation.navigate('WorkoutDetail', { entityId: workout.id });
   };
 
   const onDeletePress = async () => {
@@ -70,7 +64,7 @@ const ProgramDetailScreen: React.FC<Props> = ({
         {
           text: 'OK',
           onPress: async () => {
-            await Program.delete(programId);
+            await Program.delete(entityId);
             navigation.pop();
           },
         },
@@ -78,13 +72,13 @@ const ProgramDetailScreen: React.FC<Props> = ({
     );
   };
 
-  if (!program) {
+  if (!entity) {
     return null;
   }
 
   return (
     <View>
-      {program.workouts && program.workouts.map((workout, key) => (
+      {entity.workouts && entity.workouts.map((workout, key) => (
         <AccordionRow
           key={workout.id}
           accordionContent={(
@@ -106,4 +100,13 @@ const ProgramDetailScreen: React.FC<Props> = ({
   );
 };
 
-export default ProgramDetailScreen;
+export default withFetchDetail(
+  ProgramDetailScreen,
+  ({ route }) => {
+    const { entityId } = route.params;
+    return Program.findOne(
+      entityId,
+      { relations: ['workouts'] },
+    );
+  },
+);

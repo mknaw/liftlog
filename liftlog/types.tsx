@@ -3,17 +3,13 @@ export type RootStackParamList = {
   Home: undefined;
   ProgramList: undefined;
   ProgramForm: undefined;
-  ProgramDetail: { programId: number };
-  ThisWorkout: { workoutId: number };
+  ProgramDetail: DetailParams;
+  WorkoutDetail: DetailParams;
   ExerciseForm: { workoutId: number };
   RecordSet: { exerciseId: number },
   NotFound: undefined;
 };
 
-export type RecordSetParamList = {
-  RecordSetScreen: undefined;
-};
-
-export type ThisWorkoutParamList = {
-  ThisWorkoutScreen: undefined;
+type DetailParams = {
+  entityId: number;
 };

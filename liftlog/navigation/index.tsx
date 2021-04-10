@@ -15,7 +15,7 @@ import ProgramDetailScreen from '../screens/ProgramDetailScreen';
 import ProgramFormScreen from '../screens/ProgramFormScreen';
 import ProgramListScreen from '../screens/ProgramListScreen';
 import RecordSetScreen from '../screens/RecordSetScreen';
-import ThisWorkoutScreen from '../screens/ThisWorkoutScreen';
+import WorkoutDetailScreen from '../screens/WorkoutDetailScreen';
 import { RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -65,8 +65,8 @@ function RootNavigator() {
         options={{ title: 'Program Builder' }}
       />
       <Stack.Screen
-        name='ThisWorkout'
-        component={ThisWorkoutScreen}
+        name='WorkoutDetail'
+        component={WorkoutDetailScreen}
         options={{ title: 'This Workout' }}
       />
       <Stack.Screen
