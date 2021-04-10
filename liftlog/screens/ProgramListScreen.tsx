@@ -3,9 +3,9 @@ import React from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   Button,
-  ScrollView,
   StyleSheet,
   Text,
+  View,
 } from 'react-native';
 
 import TextRow from '../components/TextRow';
@@ -28,7 +28,7 @@ const ProgramListScreen: React.FC<Props> = ({
   navigation,
   entities,
 }: Props) => (
-  <ScrollView style={styles.container}>
+  <View style={styles.container}>
     {entities
       ? entities.map((program) => (
         <TextRow
@@ -44,7 +44,7 @@ const ProgramListScreen: React.FC<Props> = ({
       title='Add Program'
       onPress={() => navigation.navigate('ProgramForm')}
     />
-  </ScrollView>
+  </View>
 );
 
 const styles = StyleSheet.create({

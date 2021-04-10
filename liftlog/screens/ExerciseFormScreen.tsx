@@ -65,7 +65,7 @@ const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         rules={{
           ...FormUtils.requiredRule('Weight goal'),
           min: {
-            value: 0,
+            value: 1,
             message: 'Please enter some weight',
           },
           max: {
@@ -83,7 +83,7 @@ const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         rules={{
           ...FormUtils.requiredRule('Set goal'),
           min: {
-            value: 0,
+            value: 1,
             message: 'Must do at least one set!',
           },
           max: {
@@ -101,7 +101,7 @@ const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         rules={{
           ...FormUtils.requiredRule('Rep goal'),
           min: {
-            value: 0,
+            value: 1,
             message: 'Must do at least one rep!',
           },
           max: {

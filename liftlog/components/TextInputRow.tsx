@@ -21,7 +21,7 @@ type Props = {
   errors?: Record<string, any>,
   // TODO have to figure out how to get the enum from native props
   keyboardType?: KeyboardType,
-};
+} & TextInput['props'];
 
 const TextInputRow: React.FC<Props> = ({
   control,
@@ -29,7 +29,7 @@ const TextInputRow: React.FC<Props> = ({
   errors,
   rules,
   label = TextUtils.camelToTitle(name),
-  keyboardType = 'default',
+  ...textInputProps
 }: Props) => (
   <View style={styles.container}>
     {errors && name in errors && (
@@ -51,7 +51,7 @@ const TextInputRow: React.FC<Props> = ({
             onChangeText={(text) => onChange(text)}
             value={value}
             style={styles.textInput}
-            keyboardType={keyboardType}
+            {...textInputProps}
           />
         )}
       />

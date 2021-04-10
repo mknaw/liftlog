@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Button, ScrollView, StyleSheet } from 'react-native';
-import { Table, Row } from 'react-native-table-component';
+import { useForm } from 'react-hook-form';
+import { Button, StyleSheet, View } from 'react-native';
 
-import WorkoutRow from '../components/WorkoutRow';
+import ExerciseSummary from '../components/ExerciseSummary';
+import TextInputRow from '../components/TextInputRow';
 import { Workout } from '../db/entities/Entities';
 import withFetchDetail from '../hocs/withFetchDetail';
 import { BaseStyles } from '../styles';
@@ -27,25 +28,54 @@ type Props = {
   entity: Workout;
 };
 
-const WorkoutDetailScreen: React.FC<Props> = (props: Props) => {
-  const { navigation, entity } = props;
+type Inputs = {
+  nickname: string,
+};
 
-  const headers = ['Exercise', 'Weight', 'Sets', 'Rep Goal'];
+const WorkoutDetailScreen: React.FC<Props> = ({
+  navigation,
+  entity,
+}: Props) => {
+  const { control, handleSubmit, errors } = useForm<Inputs>();
+
+  useEffect(() => {
+    navigation.addListener('beforeRemove', async () => {
+      // TODO this is a little simplistic but OK for now
+      if (entity && !entity.exercises.length) {
+        await Workout.delete(entity.id);
+      } else {
+        handleSubmit(async (data) => {
+          const { nickname } = data;
+          if (nickname) {
+            // TODO this won't work at present because entity passed by prop
+            entity.nickname = nickname;
+            await entity.save();
+          }
+        })();
+      }
+    });
+  // TODO have to have empty dependency array to not bind many times
+  // there is probably some different way to do this.
+  }, []);
 
   if (!entity) {
     return null;
   }
   return (
-    <ScrollView style={styles.container}>
-      <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-        <Row data={headers} style={styles.head} textStyle={styles.head_text} />
-        {entity.exercises && entity.exercises.map((exercise) => (
-          <WorkoutRow
-            key={exercise.id}
-            exercise={exercise}
-          />
-        ))}
-      </Table>
+    <View style={styles.container}>
+      <TextInputRow
+        name='nickname'
+        value={entity.nickname}
+        placeholder='Day X'
+        control={control}
+        errors={errors}
+      />
+      {entity.exercises && entity.exercises.map((exercise) => (
+        <ExerciseSummary
+          key={exercise.id}
+          exercise={exercise}
+        />
+      ))}
       <Button
         title='Add Exercise'
         onPress={() => {
@@ -55,7 +85,7 @@ const WorkoutDetailScreen: React.FC<Props> = (props: Props) => {
           );
         }}
       />
-    </ScrollView>
+    </View>
   );
 };
 

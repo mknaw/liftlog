@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   View,
@@ -9,27 +9,41 @@ import TextRow from './TextRow';
 type Props = {
   children: React.ReactNode,
   accordionContent: React.ReactElement,
+  allowShow?: boolean,
+  onPressHandler?: () => boolean,
 };
 
-const AccordionRow: React.FC<Props> = (props: Props) => {
-  const { children, accordionContent } = props;
+const AccordionRow: React.FC<Props> = ({
+  children,
+  accordionContent,
+  allowShow = true,
+  ...otherProps
+}: Props) => {
+  const { onPressHandler } = otherProps;
 
   const [shown, setShown] = useState(false);
 
-  const accordion = (
-    <View>
-      {accordionContent}
-    </View>
-  );
+  useEffect(() => {
+    setShown(allowShow);
+  }, [allowShow]);
 
   return (
     <>
       <TextRow
-        onPress={() => { setShown(!shown); }}
+        onPress={() => {
+          if (onPressHandler) {
+            onPressHandler();
+          }
+          setShown(allowShow ? !shown : false);
+        }}
       >
         {children}
       </TextRow>
-      {shown && accordion}
+      {allowShow && shown && (
+        <View>
+          {accordionContent}
+        </View>
+      )}
     </>
   );
 };

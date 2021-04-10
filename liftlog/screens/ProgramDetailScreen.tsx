@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   Alert,
   Button,
+  StyleSheet,
+  Text,
   View,
 } from 'react-native';
 
@@ -12,6 +14,7 @@ import AccordionRow from '../components/AccordionRow';
 import WorkoutSummary from '../components/WorkoutSummary';
 import { Program, Workout } from '../db/entities/Entities';
 import withFetchDetail from '../hocs/withFetchDetail';
+import { TextStyles } from '../styles';
 import { RootStackParamList } from '../types';
 
 type ProgramDetailRouteProp = RouteProp<
@@ -37,7 +40,11 @@ const ProgramDetailScreen: React.FC<Props> = ({
 }: Props) => {
   const { entityId } = route.params;
 
-  // setProgram(thisProgram);
+  const [
+    lastPressedWorkoutId,
+    setLastPressedWorkoutId,
+  ] = useState<number>();
+
   useEffect(() => {
     if (entity) {
       navigation.setOptions({ title: entity.name });
@@ -81,11 +88,32 @@ const ProgramDetailScreen: React.FC<Props> = ({
       {entity.workouts && entity.workouts.map((workout, key) => (
         <AccordionRow
           key={workout.id}
+          allowShow={lastPressedWorkoutId === workout.id}
+          onPressHandler={() => {
+            setLastPressedWorkoutId(workout.id);
+            return true;
+          }}
           accordionContent={(
-            <WorkoutSummary workout={workout} />
+            <>
+              <WorkoutSummary workout={workout} />
+              <View style={styles.workoutOptsContainer}>
+                <Text
+                  style={styles.workoutOptText}
+                  onPress={() => navigation.push(
+                    'WorkoutDetail',
+                    { entityId: workout.id },
+                  )}
+                >
+                  Edit
+                </Text>
+                <Text style={styles.workoutOptText}>
+                  Start
+                </Text>
+              </View>
+            </>
           )}
         >
-          { `Day ${key + 1}` }
+          { workout.nickname || `Day ${key + 1}` }
         </AccordionRow>
       ))}
       <Button
@@ -99,6 +127,20 @@ const ProgramDetailScreen: React.FC<Props> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  workoutOptsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    // TODO these should be from a common style
+    backgroundColor: 'orange',
+  },
+  workoutOptText: {
+    // TODO these should be from a common style
+    color: 'white',
+    ...TextStyles.medium,
+  },
+});
 
 export default withFetchDetail(
   ProgramDetailScreen,
