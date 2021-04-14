@@ -6,7 +6,7 @@ export type RootStackParamList = {
   ProgramDetail: DetailParams;
   WorkoutDetail: DetailParams;
   ExerciseForm: { workoutId: number };
-  RecordSet: { exerciseId: number },
+  RecordSet: DetailParams,
   NotFound: undefined;
 };
 

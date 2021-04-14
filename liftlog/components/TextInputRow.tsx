@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Control, Controller } from 'react-hook-form';
+import { Controller, FieldErrors, UseControllerOptions } from 'react-hook-form';
 import {
   KeyboardType,
   StyleSheet,
@@ -13,15 +13,11 @@ import { Colors, FormStyles, TextStyles } from '../styles';
 import { TextUtils } from '../utils';
 
 type Props = {
-  control: Control,
-  name: string,
   label?: string,
-  rules?: Object,
   // TODO probably not orthodox but dunno enough about TS to do better
-  errors?: Record<string, any>,
-  // TODO have to figure out how to get the enum from native props
+  errors?: FieldErrors,
   keyboardType?: KeyboardType,
-} & TextInput['props'];
+} & UseControllerOptions & TextInput['props'];
 
 const TextInputRow: React.FC<Props> = ({
   control,
@@ -44,7 +40,7 @@ const TextInputRow: React.FC<Props> = ({
       <Controller
         name={name}
         control={control}
-        defaultValue=''
+        defaultValue={textInputProps.defaultValue || ''}
         rules={rules}
         render={({ onChange, value }) => (
           <TextInput

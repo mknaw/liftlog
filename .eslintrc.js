@@ -25,6 +25,7 @@ module.exports = {
   rules: {
     'max-len': ['error', { code: 80 }],
     'jsx-quotes': ['error', 'prefer-single'],
+    'padded-blocks': 'off',
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],

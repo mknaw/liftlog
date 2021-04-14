@@ -13,7 +13,7 @@ import {
 import AccordionRow from '../components/AccordionRow';
 import WorkoutSummary from '../components/WorkoutSummary';
 import { Program, Workout } from '../db/entities/Entities';
-import withFetchDetail from '../hocs/withFetchDetail';
+import useFetchEntity from '../hooks/useFetchEntity';
 import { TextStyles } from '../styles';
 import { RootStackParamList } from '../types';
 
@@ -30,15 +30,18 @@ type ProgramDetailNavigationProp = StackNavigationProp<
 type Props = {
   route: ProgramDetailRouteProp;
   navigation: ProgramDetailNavigationProp;
-  entity: Program;
 };
 
 const ProgramDetailScreen: React.FC<Props> = ({
   route,
   navigation,
-  entity,
 }: Props) => {
   const { entityId } = route.params;
+  const entity = useFetchEntity(
+    Program,
+    entityId,
+    { relations: ['workouts'] },
+  );
 
   const [
     lastPressedWorkoutId,
@@ -142,13 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withFetchDetail(
-  ProgramDetailScreen,
-  ({ route }) => {
-    const { entityId } = route.params;
-    return Program.findOne(
-      entityId,
-      { relations: ['workouts'] },
-    );
-  },
-);
+export default ProgramDetailScreen;

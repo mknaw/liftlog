@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -11,6 +11,7 @@ import {
 
 import RepSlider from '../components/RepSlider';
 import { Exercise } from '../db/entities/Entities';
+import useFetchEntity from '../hooks/useFetchEntity';
 import { BaseStyles, TextStyles } from '../styles';
 import { RootStackParamList } from '../types';
 
@@ -30,43 +31,33 @@ type Props = {
 };
 
 const RecordSetScreen: React.FC<Props> = ({ route, navigation }: Props) => {
-  const { exerciseId } = route.params;
+  const { entityId } = route.params;
+  const entity = useFetchEntity(Exercise, entityId);
 
-  const [exercise, setExercise] = useState<Exercise>();
-  const [setNumber, setSetNumber] = useState<number>(1);
+  const [setNumber, setSetNumber] = useState(1);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setExercise(await Exercise.findOne(
-        exerciseId,
-        { relations: ['lift'] },
-      ));
-    };
-    fetchData();
-  }, [exerciseId]);
-
-  if (!exercise) {
+  if (!entity) {
     return null;
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {`${exercise.lift.name} - ${exercise.weight} lbs.`}
+        {`${entity.lift.name} - ${entity.weight} lbs.`}
       </Text>
       <Text style={styles.goal}>
-        {`Goal: ${exercise.reps}`}
+        {`Goal: ${entity.reps}`}
       </Text>
       <Text style={styles.goal}>
         {`Set: ${setNumber}`}
       </Text>
-      <RepSlider repGoal={exercise.reps} />
+      <RepSlider repGoal={entity.reps} />
       <Button
         onPress={() => {
-          if (setNumber > exercise.reps) {
+          if (setNumber > entity.reps) {
             navigation.navigate(
               'WorkoutDetail',
-              { entityId: exercise.workout.id },
+              { entityId: entity.workout.id },
             );
           } else {
             setSetNumber(setNumber + 1);

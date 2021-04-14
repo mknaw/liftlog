@@ -27,7 +27,7 @@ export default function useConnection(): void {
       migrationsRun: true,
 
       synchronize: false,
-      logging: false, // TODO set based on dev mode?
+      logging: true, // TODO set based on dev mode?
     });
 
     setConnection(createdConnection);

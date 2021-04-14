@@ -10,7 +10,7 @@ import {
 
 import TextRow from '../components/TextRow';
 import { Program } from '../db/entities/Entities';
-import withFetchList from '../hocs/withFetchList';
+import useFetchEntities from '../hooks/useFetchEntities';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
 
@@ -21,31 +21,36 @@ type ProgramListScreenNavigationProp = StackNavigationProp<
 
 type Props = {
   navigation: ProgramListScreenNavigationProp;
-  entities: Array<Program>;
 };
 
 const ProgramListScreen: React.FC<Props> = ({
   navigation,
-  entities,
-}: Props) => (
-  <View style={styles.container}>
-    {entities
-      ? entities.map((program) => (
-        <TextRow
-          key={program.id}
-          onPress={() => {
-            navigation.navigate('ProgramDetail', { entityId: program.id });
-          }}
-        >
-          { program.name }
-        </TextRow>
-      )) : <Text>No programs yet</Text>}
-    <Button
-      title='Add Program'
-      onPress={() => navigation.navigate('ProgramForm')}
-    />
-  </View>
-);
+}: Props) => {
+  const entities = useFetchEntities(Program);
+
+  if (!entities) {
+    return null;
+  }
+  return (
+    <View style={styles.container}>
+      {entities
+        ? entities.map((program) => (
+          <TextRow
+            key={program.id}
+            onPress={() => {
+              navigation.navigate('ProgramDetail', { entityId: program.id });
+            }}
+          >
+            { program.name }
+          </TextRow>
+        )) : <Text>No programs yet</Text>}
+      <Button
+        title='Add Program'
+        onPress={() => navigation.navigate('ProgramForm')}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -53,7 +58,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withFetchList(
-  ProgramListScreen,
-  () => (Program.find()),
-);
+export default ProgramListScreen;

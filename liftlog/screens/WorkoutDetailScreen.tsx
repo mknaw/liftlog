@@ -8,7 +8,7 @@ import { Button, StyleSheet, View } from 'react-native';
 import ExerciseSummary from '../components/ExerciseSummary';
 import TextInputRow from '../components/TextInputRow';
 import { Workout } from '../db/entities/Entities';
-import withFetchDetail from '../hocs/withFetchDetail';
+import useFetchEntity from '../hooks/useFetchEntity';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
 
@@ -25,7 +25,6 @@ type WorkoutDetailNavigationProp = StackNavigationProp<
 type Props = {
   route: WorkoutDetailRouteProp;
   navigation: WorkoutDetailNavigationProp;
-  entity: Workout;
 };
 
 type Inputs = {
@@ -33,30 +32,43 @@ type Inputs = {
 };
 
 const WorkoutDetailScreen: React.FC<Props> = ({
+  route,
   navigation,
-  entity,
 }: Props) => {
+  const { entityId } = route.params;
+  const entity = useFetchEntity(
+    Workout,
+    entityId,
+    { relations: ['exercises', 'exercises.lift'] },
+  );
+
   const { control, handleSubmit, errors } = useForm<Inputs>();
 
   useEffect(() => {
+    if (!entity) {
+      return;
+    }
     navigation.addListener('beforeRemove', async () => {
-      // TODO this is a little simplistic but OK for now
-      if (entity && !entity.exercises.length) {
+      // TODO this concept of discarding changes has to be more broad
+      if (!entity.exercises.length) {
         await Workout.delete(entity.id);
-      } else {
-        handleSubmit(async (data) => {
-          const { nickname } = data;
-          if (nickname) {
-            // TODO this won't work at present because entity passed by prop
-            entity.nickname = nickname;
-            await entity.save();
-          }
-        })();
       }
     });
-  // TODO have to have empty dependency array to not bind many times
-  // there is probably some different way to do this.
-  }, []);
+  }, [entity, navigation, handleSubmit]);
+
+  const onSaveWorkout = () => {
+    if (!entity) {
+      return;
+    }
+    handleSubmit(async (data) => {
+      const { nickname } = data;
+      if (nickname) {
+        entity.nickname = nickname;
+        await entity.save();
+      }
+      navigation.pop();
+    })();
+  };
 
   if (!entity) {
     return null;
@@ -65,7 +77,7 @@ const WorkoutDetailScreen: React.FC<Props> = ({
     <View style={styles.container}>
       <TextInputRow
         name='nickname'
-        value={entity.nickname}
+        defaultValue={entity.nickname}
         placeholder='Day X'
         control={control}
         errors={errors}
@@ -85,6 +97,10 @@ const WorkoutDetailScreen: React.FC<Props> = ({
           );
         }}
       />
+      <Button
+        title='Save Workout'
+        onPress={onSaveWorkout}
+      />
     </View>
   );
 };
@@ -93,22 +109,6 @@ const styles = StyleSheet.create({
   container: {
     ...BaseStyles.container,
   },
-  head: {
-    height: 40,
-    backgroundColor: '#f1f8ff',
-  },
-  head_text: {
-    textAlign: 'center',
-    margin: 6,
-  },
 });
 
-export default withFetchDetail(
-  WorkoutDetailScreen,
-  ({ route }: Props) => {
-    const { entityId } = route.params;
-    return Workout.findOne(
-      entityId, { relations: ['exercises', 'exercises.lift'] },
-    );
-  },
-);
+export default WorkoutDetailScreen;
