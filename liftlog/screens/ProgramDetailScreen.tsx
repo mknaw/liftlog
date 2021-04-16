@@ -12,7 +12,8 @@ import {
 
 import AccordionRow from '../components/AccordionRow';
 import WorkoutSummary from '../components/WorkoutSummary';
-import { Program, Workout } from '../db/entities/Entities';
+import Program from '../db/entities/Program';
+import Exercise from '../db/entities/Exercise';
 import useFetchEntity from '../hooks/useFetchEntity';
 import { TextStyles } from '../styles';
 import { RootStackParamList } from '../types';

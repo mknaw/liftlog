@@ -2,12 +2,10 @@ import * as React from 'react';
 
 import { Connection, createConnection } from 'typeorm';
 
-import {
-  Exercise,
-  Lift,
-  Program,
-  Workout,
-} from '../db/entities/Entities';
+import Exercise from '../db/entities/Exercise';
+import Lift from '../db/entities/Lift';
+import Program from '../db/entities/Program';
+import Workout from '../db/entities/Workout';
 import Initial1616335747077 from '../db/migrations/001-Initial';
 
 export default function useConnection(): void {

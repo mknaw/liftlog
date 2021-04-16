@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import RepSlider from '../components/RepSlider';
-import { Exercise } from '../db/entities/Entities';
+import Exercise from '../db/entities/Exercise';
 import useFetchEntity from '../hooks/useFetchEntity';
 import { BaseStyles, TextStyles } from '../styles';
 import { RootStackParamList } from '../types';

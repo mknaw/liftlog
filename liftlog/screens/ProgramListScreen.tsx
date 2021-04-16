@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import TextRow from '../components/TextRow';
-import { Program } from '../db/entities/Entities';
+import Program from '../db/entities/Program';
 import useFetchEntities from '../hooks/useFetchEntities';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';

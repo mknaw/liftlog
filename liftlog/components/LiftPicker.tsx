@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import { Control, Controller } from 'react-hook-form';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Lift } from '../db/entities/Entities';
+import Lift from '../db/entities/Lift';
 
 type Props = {
   control: Control,

@@ -7,7 +7,9 @@ import { Button, StyleSheet, View } from 'react-native';
 
 import LiftPicker from '../components/LiftPicker';
 import TextInputRow from '../components/TextInputRow';
-import { Exercise, Lift, Workout } from '../db/entities/Entities';
+import Exercise from '../db/entities/Exercise';
+import Lift from '../db/entities/Lift';
+import Workout from '../db/entities/Workout';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
 import { FormUtils } from '../utils';

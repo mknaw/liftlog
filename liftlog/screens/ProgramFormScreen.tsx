@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import TextInputRow from '../components/TextInputRow';
-import { Program } from '../db/entities/Entities';
+import Program from '../db/entities/Program';
 import { BaseStyles, FormStyles } from '../styles';
 import { RootStackParamList } from '../types';
 

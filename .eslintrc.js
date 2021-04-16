@@ -41,6 +41,8 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    // It's not good to have this off, but typeorm FKs seemingly force cycles.
+    'import/no-cycle': 'off',
     'import/order': [
       'error',
       {

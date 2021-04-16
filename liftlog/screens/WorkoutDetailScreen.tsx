@@ -7,7 +7,7 @@ import { Button, StyleSheet, View } from 'react-native';
 
 import ExerciseSummary from '../components/ExerciseSummary';
 import TextInputRow from '../components/TextInputRow';
-import { Workout } from '../db/entities/Entities';
+import Workout from '../db/entities/Workout';
 import useFetchEntity from '../hooks/useFetchEntity';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';

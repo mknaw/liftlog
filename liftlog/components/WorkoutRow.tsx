@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Row } from 'react-native-table-component';
 
-import { Exercise } from '../db/entities/Entities';
+import Exercise from '../db/entities/Exercise';
 
 export interface Props {
   exercise: Exercise;

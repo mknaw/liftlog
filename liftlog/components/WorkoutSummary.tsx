@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { Exercise, Workout } from '../db/entities/Entities';
+import Exercise from '../db/entities/Exercise';
+import Workout from '../db/entities/Workout';
 import ExerciseSummary from './ExerciseSummary';
 
 type Props = {

@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 
-import { Exercise } from '../db/entities/Entities';
+import Exercise from '../db/entities/Exercise';
 import { TextStyles } from '../styles';
 
 type Props = {
