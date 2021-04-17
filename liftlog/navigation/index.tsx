@@ -8,14 +8,14 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import { ColorSchemeName } from 'react-native';
 
-import ExerciseFormScreen from '../screens/ExerciseFormScreen';
+import ExercisePlanFormScreen from '../screens/ExercisePlanFormScreen';
 import HomeScreen from '../screens/HomeScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import ProgramDetailScreen from '../screens/ProgramDetailScreen';
 import ProgramFormScreen from '../screens/ProgramFormScreen';
 import ProgramListScreen from '../screens/ProgramListScreen';
 import RecordSetScreen from '../screens/RecordSetScreen';
-import WorkoutDetailScreen from '../screens/WorkoutDetailScreen';
+import WorkoutPlanDetailScreen from '../screens/WorkoutPlanDetailScreen';
 import { RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -65,13 +65,13 @@ function RootNavigator() {
         options={{ title: 'Program Builder' }}
       />
       <Stack.Screen
-        name='WorkoutDetail'
-        component={WorkoutDetailScreen}
-        options={{ title: 'This Workout' }}
+        name='WorkoutPlanDetail'
+        component={WorkoutPlanDetailScreen}
+        options={{ title: 'This Workout Plan' }}
       />
       <Stack.Screen
-        name='ExerciseForm'
-        component={ExerciseFormScreen}
+        name='ExercisePlanForm'
+        component={ExercisePlanFormScreen}
         options={{ title: 'Add Exercise' }}
       />
       <Stack.Screen

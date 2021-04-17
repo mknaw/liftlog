@@ -7,26 +7,26 @@ import { Button, StyleSheet, View } from 'react-native';
 
 import LiftPicker from '../components/LiftPicker';
 import TextInputRow from '../components/TextInputRow';
-import Exercise from '../db/entities/Exercise';
+import ExercisePlan from '../db/entities/ExercisePlan';
 import Lift from '../db/entities/Lift';
-import Workout from '../db/entities/Workout';
+import WorkoutPlan from '../db/entities/WorkoutPlan';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
 import { FormUtils } from '../utils';
 
-type ExerciseFormRouteProp = RouteProp<
+type ExercisePlanFormRouteProp = RouteProp<
   RootStackParamList,
-  'ExerciseForm'
+  'ExercisePlanForm'
 >;
 
-type ExerciseFormNavigationProp = StackNavigationProp<
+type ExercisePlanFormNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'ExerciseForm'
+  'ExercisePlanForm'
 >;
 
 type Props = {
-  route: ExerciseFormRouteProp;
-  navigation: ExerciseFormNavigationProp;
+  route: ExercisePlanFormRouteProp;
+  navigation: ExercisePlanFormNavigationProp;
 };
 
 type Inputs = {
@@ -37,26 +37,29 @@ type Inputs = {
   lift: number,
 };
 
-const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
-  const { workoutId } = route.params;
+const ExercisePlanFormScreen: React.FC<Props> = ({
+  route,
+  navigation,
+}: Props) => {
+  const { workoutPlanId } = route.params;
 
   const { control, handleSubmit, errors } = useForm<Inputs>();
 
-  async function newExercise(data: Inputs) {
+  async function newExercisePlan(data: Inputs) {
     // TODO surely there must be a way to assign FK by ID?
-    const workout = await Workout.findOne(workoutId);
+    const workoutPlan = await WorkoutPlan.findOne(workoutPlanId);
     const lift = await Lift.findOne(data.lift);
-    if (!workout || !lift) {
+    if (!workoutPlan || !lift) {
       return;
     }
-    const exercise = new Exercise();
-    exercise.workout = workout;
-    exercise.lift = lift;
+    const exercisePlan = new ExercisePlan();
+    exercisePlan.workoutPlan = workoutPlan;
+    exercisePlan.lift = lift;
     // TODO these should be coerced to number by input or hook-form
-    exercise.weight = Number(data.weight);
-    exercise.sets = Number(data.sets);
-    exercise.reps = Number(data.reps);
-    await exercise.save();
+    exercisePlan.weight = Number(data.weight);
+    exercisePlan.sets = Number(data.sets);
+    exercisePlan.reps = Number(data.reps);
+    await exercisePlan.save();
   }
 
   return (
@@ -122,7 +125,7 @@ const ExerciseFormScreen: React.FC<Props> = ({ route, navigation }: Props) => {
       <Button
         title='Add Exercise'
         onPress={handleSubmit(async (data) => {
-          await newExercise(data);
+          await newExercisePlan(data);
           navigation.pop();
         })}
       />
@@ -145,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExerciseFormScreen;
+export default ExercisePlanFormScreen;

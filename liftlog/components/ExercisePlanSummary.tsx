@@ -6,15 +6,16 @@ import {
   View,
 } from 'react-native';
 
-import Exercise from '../db/entities/Exercise';
+import ExercisePlan from '../db/entities/ExercisePlan';
 import { TextStyles } from '../styles';
 
 type Props = {
-  exercise: Exercise,
+  exercisePlan: ExercisePlan,
 };
 
-const ExerciseSummary: React.FC<Props> = ({ exercise }: Props) => {
-  const summary = `${exercise.lift.name} ${exercise.sets}x${exercise.reps}`;
+const ExercisePlanSummary: React.FC<Props> = ({ exercisePlan }: Props) => {
+  const summary = `${exercisePlan.lift.name} 
+    ${exercisePlan.sets}x${exercisePlan.reps}`;
 
   return (
     <View style={styles.container}>
@@ -35,4 +36,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExerciseSummary;
+export default ExercisePlanSummary;

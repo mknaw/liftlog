@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import Exercise from './Exercise';
+import ExercisePlan from './ExercisePlan';
 
 @Entity()
 export default class Lift extends BaseEntity {
@@ -16,6 +16,6 @@ export default class Lift extends BaseEntity {
   @Column()
   name: string;
 
-  @OneToMany('Exercise', 'lift')
-  exercises: Exercise[];
+  @OneToMany('ExercisePlan', 'lift')
+  exercisePlans: ExercisePlan[];
 }

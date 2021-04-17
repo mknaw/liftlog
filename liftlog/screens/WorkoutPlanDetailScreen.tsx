@@ -5,41 +5,41 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useForm } from 'react-hook-form';
 import { Button, StyleSheet, View } from 'react-native';
 
-import ExerciseSummary from '../components/ExerciseSummary';
+import ExercisePlanSummary from '../components/ExercisePlanSummary';
 import TextInputRow from '../components/TextInputRow';
-import Workout from '../db/entities/Workout';
+import WorkoutPlan from '../db/entities/WorkoutPlan';
 import useFetchEntity from '../hooks/useFetchEntity';
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
 
-type WorkoutDetailRouteProp = RouteProp<
+type WorkoutPlanDetailRouteProp = RouteProp<
   RootStackParamList,
-  'WorkoutDetail'
+  'WorkoutPlanDetail'
 >;
 
-type WorkoutDetailNavigationProp = StackNavigationProp<
+type WorkoutPlanDetailNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'WorkoutDetail'
+  'WorkoutPlanDetail'
 >;
 
 type Props = {
-  route: WorkoutDetailRouteProp;
-  navigation: WorkoutDetailNavigationProp;
+  route: WorkoutPlanDetailRouteProp;
+  navigation: WorkoutPlanDetailNavigationProp;
 };
 
 type Inputs = {
   nickname: string,
 };
 
-const WorkoutDetailScreen: React.FC<Props> = ({
+const WorkoutPlanDetailScreen: React.FC<Props> = ({
   route,
   navigation,
 }: Props) => {
   const { entityId } = route.params;
   const entity = useFetchEntity(
-    Workout,
+    WorkoutPlan,
     entityId,
-    { relations: ['exercises', 'exercises.lift'] },
+    { relations: ['exercisePlans', 'exercisePlans.lift'] },
   );
 
   const { control, handleSubmit, errors } = useForm<Inputs>();
@@ -50,13 +50,13 @@ const WorkoutDetailScreen: React.FC<Props> = ({
     }
     navigation.addListener('beforeRemove', async () => {
       // TODO this concept of discarding changes has to be more broad
-      if (!entity.exercises.length) {
-        await Workout.delete(entity.id);
+      if (!entity.exercisePlans.length) {
+        await WorkoutPlan.delete(entity.id);
       }
     });
   }, [entity, navigation, handleSubmit]);
 
-  const onSaveWorkout = () => {
+  const onSaveWorkoutPlan = () => {
     if (!entity) {
       return;
     }
@@ -82,24 +82,24 @@ const WorkoutDetailScreen: React.FC<Props> = ({
         control={control}
         errors={errors}
       />
-      {entity.exercises && entity.exercises.map((exercise) => (
-        <ExerciseSummary
-          key={exercise.id}
-          exercise={exercise}
+      {entity.exercisePlans && entity.exercisePlans.map((exercisePlan) => (
+        <ExercisePlanSummary
+          key={exercisePlan.id}
+          exercisePlan={exercisePlan}
         />
       ))}
       <Button
         title='Add Exercise'
         onPress={() => {
           navigation.navigate(
-            'ExerciseForm',
-            { workoutId: entity.id },
+            'ExercisePlanForm',
+            { workoutPlanId: entity.id },
           );
         }}
       />
       <Button
-        title='Save Workout'
-        onPress={onSaveWorkout}
+        title='Save Workout Plan'
+        onPress={onSaveWorkoutPlan}
       />
     </View>
   );
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WorkoutDetailScreen;
+export default WorkoutPlanDetailScreen;

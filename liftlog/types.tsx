@@ -4,8 +4,8 @@ export type RootStackParamList = {
   ProgramList: undefined;
   ProgramForm: undefined;
   ProgramDetail: DetailParams;
-  WorkoutDetail: DetailParams;
-  ExerciseForm: { workoutId: number };
+  WorkoutPlanDetail: DetailParams;
+  ExercisePlanForm: { workoutPlanId: number };
   RecordSet: DetailParams,
   NotFound: undefined;
 };

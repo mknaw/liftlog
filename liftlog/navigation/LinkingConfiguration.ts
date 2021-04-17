@@ -11,9 +11,9 @@ export default {
               IntraSetScreen: 'recordset',
             },
           },
-          WorkoutDetail: {
+          WorkoutPlanDetail: {
             screens: {
-              WorkoutDetailScreen: 'workoutdetail',
+              WorkoutPlanDetailScreen: 'workoutplandetail',
             },
           },
         },

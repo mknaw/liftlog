@@ -38,7 +38,7 @@ export default class Initial1616335747077 implements MigrationInterface {
     }), true);
 
     await queryRunner.createTable(new Table({
-      name: 'workout',
+      name: 'workout_plan',
       columns: [
         {
           name: 'id',
@@ -65,6 +65,22 @@ export default class Initial1616335747077 implements MigrationInterface {
         },
       ],
     }), true);
+    await queryRunner.createTable(new Table({
+      name: 'workout',
+      columns: [
+        {
+          name: 'id',
+          type: 'integer',
+          isPrimary: true,
+          isGenerated: true,
+          generationStrategy: 'increment',
+        },
+        {
+          name: 'performed',
+          type: 'integer',
+        },
+      ],
+    }), true);
 
     await queryRunner.createTable(new Table({
       name: 'lift',
@@ -88,7 +104,7 @@ export default class Initial1616335747077 implements MigrationInterface {
     });
 
     await queryRunner.createTable(new Table({
-      name: 'exercise',
+      name: 'exercise_plan',
       columns: [
         {
           name: 'id',
@@ -108,6 +124,38 @@ export default class Initial1616335747077 implements MigrationInterface {
         {
           name: 'sets',
           type: 'integer',
+        },
+        {
+          name: 'workoutPlanId',
+          type: 'integer',
+        },
+        {
+          name: 'liftId',
+          type: 'integer',
+        },
+      ],
+      foreignKeys: [
+        {
+          columnNames: ['workoutPlanId'],
+          referencedTableName: 'workout_plan',
+          referencedColumnNames: ['id'],
+        },
+        {
+          columnNames: ['liftId'],
+          referencedTableName: 'lift',
+          referencedColumnNames: ['id'],
+        },
+      ],
+    }), true);
+    await queryRunner.createTable(new Table({
+      name: 'exercise',
+      columns: [
+        {
+          name: 'id',
+          type: 'integer',
+          isPrimary: true,
+          isGenerated: true,
+          generationStrategy: 'increment',
         },
         {
           name: 'workoutId',
@@ -131,13 +179,48 @@ export default class Initial1616335747077 implements MigrationInterface {
         },
       ],
     }), true);
+
+    await queryRunner.createTable(new Table({
+      name: 'set',
+      columns: [
+        {
+          name: 'id',
+          type: 'integer',
+          isPrimary: true,
+          isGenerated: true,
+          generationStrategy: 'increment',
+        },
+        {
+          name: 'weight',
+          type: 'integer',
+        },
+        {
+          name: 'reps',
+          type: 'integer',
+        },
+        {
+          name: 'exerciseId',
+          type: 'integer',
+        },
+      ],
+      foreignKeys: [
+        {
+          columnNames: ['exerciseId'],
+          referencedTableName: 'exercise',
+          referencedColumnNames: ['id'],
+        },
+      ],
+    }), true);
   }
 
   // eslint-disable-next-line
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropTable('lift');
+    await queryRunner.dropTable('workout_plan');
     await queryRunner.dropTable('workout');
+    await queryRunner.dropTable('exercise_plan');
     await queryRunner.dropTable('exercise');
     await queryRunner.dropTable('program');
+    await queryRunner.dropTable('set');
   }
 }

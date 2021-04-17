@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import Workout from './Workout';
+import WorkoutPlan from './WorkoutPlan';
 
 @Entity()
 export default class Program extends BaseEntity {
@@ -16,8 +16,8 @@ export default class Program extends BaseEntity {
   @Column()
   name: string;
 
-  @OneToMany('Workout', 'program')
-  workouts: Workout[];
+  @OneToMany('WorkoutPlan', 'program')
+  workouts: WorkoutPlan[];
 
   // TODO created / modified ts
 }

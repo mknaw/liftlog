@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import RepSlider from '../components/RepSlider';
-import Exercise from '../db/entities/Exercise';
+import ExercisePlan from '../db/entities/ExercisePlan';
 import useFetchEntity from '../hooks/useFetchEntity';
 import { BaseStyles, TextStyles } from '../styles';
 import { RootStackParamList } from '../types';
@@ -32,7 +32,7 @@ type Props = {
 
 const RecordSetScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const { entityId } = route.params;
-  const entity = useFetchEntity(Exercise, entityId);
+  const entity = useFetchEntity(ExercisePlan, entityId);
 
   const [setNumber, setSetNumber] = useState(1);
 
@@ -56,8 +56,8 @@ const RecordSetScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         onPress={() => {
           if (setNumber > entity.reps) {
             navigation.navigate(
-              'WorkoutDetail',
-              { entityId: entity.workout.id },
+              'WorkoutPlanDetail',
+              { entityId: entity.workoutPlan.id },
             );
           } else {
             setSetNumber(setNumber + 1);

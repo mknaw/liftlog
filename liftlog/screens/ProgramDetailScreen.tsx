@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 
 import AccordionRow from '../components/AccordionRow';
-import WorkoutSummary from '../components/WorkoutSummary';
+import WorkoutPlanSummary from '../components/WorkoutPlanSummary';
 import Program from '../db/entities/Program';
-import Exercise from '../db/entities/Exercise';
+import WorkoutPlan from '../db/entities/WorkoutPlan';
 import useFetchEntity from '../hooks/useFetchEntity';
 import { TextStyles } from '../styles';
 import { RootStackParamList } from '../types';
@@ -45,8 +45,8 @@ const ProgramDetailScreen: React.FC<Props> = ({
   );
 
   const [
-    lastPressedWorkoutId,
-    setLastPressedWorkoutId,
+    lastPressedWorkoutPlanId,
+    setLastPressedWorkoutPlanId,
   ] = useState<number>();
 
   useEffect(() => {
@@ -55,12 +55,12 @@ const ProgramDetailScreen: React.FC<Props> = ({
     }
   }, [navigation, entity]);
 
-  const onAddWorkoutPress = async () => {
+  const onAddWorkoutPlanPress = async () => {
     if (!entity) return;
-    const workout = new Workout();
+    const workout = new WorkoutPlan();
     workout.program = entity;
     await workout.save();
-    navigation.navigate('WorkoutDetail', { entityId: workout.id });
+    navigation.navigate('WorkoutPlanDetail', { entityId: workout.id });
   };
 
   const onDeletePress = async () => {
@@ -92,19 +92,19 @@ const ProgramDetailScreen: React.FC<Props> = ({
       {entity.workouts && entity.workouts.map((workout, key) => (
         <AccordionRow
           key={workout.id}
-          allowShow={lastPressedWorkoutId === workout.id}
+          allowShow={lastPressedWorkoutPlanId === workout.id}
           onPressHandler={() => {
-            setLastPressedWorkoutId(workout.id);
+            setLastPressedWorkoutPlanId(workout.id);
             return true;
           }}
           accordionContent={(
             <>
-              <WorkoutSummary workout={workout} />
+              <WorkoutPlanSummary workout={workout} />
               <View style={styles.workoutOptsContainer}>
                 <Text
                   style={styles.workoutOptText}
                   onPress={() => navigation.push(
-                    'WorkoutDetail',
+                    'WorkoutPlanDetail',
                     { entityId: workout.id },
                   )}
                 >
@@ -121,8 +121,8 @@ const ProgramDetailScreen: React.FC<Props> = ({
         </AccordionRow>
       ))}
       <Button
-        title='Add Workout'
-        onPress={onAddWorkoutPress}
+        title='Add Workout Plan'
+        onPress={onAddWorkoutPlanPress}
       />
       <Button
         title='Delete'

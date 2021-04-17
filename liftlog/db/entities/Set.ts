@@ -2,20 +2,23 @@ import {
   BaseEntity,
   Column,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import Exercise from './Exercise';
 
 @Entity()
-export default class Workout extends BaseEntity {
+export default class Set extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column('int')
-  performed: number;
+  weight: number;
 
-  @OneToMany('Exercise', 'workout')
-  exercises: Exercise[];
+  @Column('int')
+  reps: number;
+
+  @ManyToOne('Exercise', 'sets')
+  exercise: Exercise;
 }

@@ -3,9 +3,12 @@ import * as React from 'react';
 import { Connection, createConnection } from 'typeorm';
 
 import Exercise from '../db/entities/Exercise';
+import ExercisePlan from '../db/entities/ExercisePlan';
 import Lift from '../db/entities/Lift';
 import Program from '../db/entities/Program';
+import Set from '../db/entities/Set';
 import Workout from '../db/entities/Workout';
+import WorkoutPlan from '../db/entities/WorkoutPlan';
 import Initial1616335747077 from '../db/migrations/001-Initial';
 
 export default function useConnection(): void {
@@ -19,7 +22,15 @@ export default function useConnection(): void {
       // eslint-disable-next-line
       driver: require('expo-sqlite'),
       // TODO how the fuck to get this to load all from dir
-      entities: [Program, Workout, Exercise, Lift],
+      entities: [
+        Program,
+        WorkoutPlan,
+        Workout,
+        ExercisePlan,
+        Exercise,
+        Lift,
+        Set,
+      ],
 
       migrations: [Initial1616335747077],
       migrationsRun: true,
