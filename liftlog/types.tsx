@@ -7,6 +7,7 @@ export type RootStackParamList = {
   WorkoutPlanDetail: DetailParams;
   ExercisePlanForm: { workoutPlanId: number };
   RecordWorkout: DetailParams,
+  WorkoutHistory: undefined;
   NotFound: undefined;
 };
 

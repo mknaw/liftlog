@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Button, ScrollView, StyleSheet } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 
 import { BaseStyles } from '../styles';
 import { RootStackParamList } from '../types';
@@ -16,16 +16,20 @@ type Props = {
 };
 
 const HomeScreen: React.FC<Props> = ({ navigation }: Props) => (
-  <ScrollView style={styles.container}>
+  <View style={styles.container}>
     <Button
       title='My Programs'
       onPress={() => navigation.navigate('ProgramList')}
     />
     <Button
+      title='Workout History'
+      onPress={() => navigation.navigate('WorkoutHistory')}
+    />
+    <Button
       title='Settings'
       onPress={() => {}}
     />
-  </ScrollView>
+  </View>
 );
 
 const styles = StyleSheet.create({
