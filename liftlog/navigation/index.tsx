@@ -14,7 +14,7 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import ProgramDetailScreen from '../screens/ProgramDetailScreen';
 import ProgramFormScreen from '../screens/ProgramFormScreen';
 import ProgramListScreen from '../screens/ProgramListScreen';
-import RecordSetScreen from '../screens/RecordSetScreen';
+import RecordWorkoutScreen from '../screens/RecordWorkoutScreen';
 import WorkoutPlanDetailScreen from '../screens/WorkoutPlanDetailScreen';
 import { RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -75,9 +75,9 @@ function RootNavigator() {
         options={{ title: 'Add Exercise' }}
       />
       <Stack.Screen
-        name='RecordSet'
-        component={RecordSetScreen}
-        options={{ title: 'Record Set' }}
+        name='RecordWorkout'
+        component={RecordWorkoutScreen}
+        options={{ title: 'Record Workout' }}
       />
       <Stack.Screen
         name='NotFound'

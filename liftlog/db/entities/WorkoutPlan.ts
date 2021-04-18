@@ -21,6 +21,6 @@ export default class WorkoutPlan extends BaseEntity {
   @OneToMany('ExercisePlan', 'workoutPlan')
   exercisePlans: ExercisePlan[];
 
-  @ManyToOne('Program', 'workouts')
+  @ManyToOne('Program', 'workoutPlans')
   program: Program;
 }

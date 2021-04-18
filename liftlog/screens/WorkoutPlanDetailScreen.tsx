@@ -51,7 +51,7 @@ const WorkoutPlanDetailScreen: React.FC<Props> = ({
     navigation.addListener('beforeRemove', async () => {
       // TODO this concept of discarding changes has to be more broad
       if (!entity.exercisePlans.length) {
-        await WorkoutPlan.delete(entity.id);
+        // await WorkoutPlan.delete(entity.id);
       }
     });
   }, [entity, navigation, handleSubmit]);

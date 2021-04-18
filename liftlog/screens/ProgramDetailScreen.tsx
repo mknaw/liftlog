@@ -41,7 +41,7 @@ const ProgramDetailScreen: React.FC<Props> = ({
   const entity = useFetchEntity(
     Program,
     entityId,
-    { relations: ['workouts'] },
+    { relations: ['workoutPlans'] },
   );
 
   const [
@@ -89,35 +89,41 @@ const ProgramDetailScreen: React.FC<Props> = ({
 
   return (
     <View>
-      {entity.workouts && entity.workouts.map((workout, key) => (
+      {entity.workoutPlans && entity.workoutPlans.map((workoutPlan, key) => (
         <AccordionRow
-          key={workout.id}
-          allowShow={lastPressedWorkoutPlanId === workout.id}
+          key={workoutPlan.id}
+          allowShow={lastPressedWorkoutPlanId === workoutPlan.id}
           onPressHandler={() => {
-            setLastPressedWorkoutPlanId(workout.id);
+            setLastPressedWorkoutPlanId(workoutPlan.id);
             return true;
           }}
           accordionContent={(
             <>
-              <WorkoutPlanSummary workout={workout} />
+              <WorkoutPlanSummary workout={workoutPlan} />
               <View style={styles.workoutOptsContainer}>
                 <Text
                   style={styles.workoutOptText}
                   onPress={() => navigation.push(
                     'WorkoutPlanDetail',
-                    { entityId: workout.id },
+                    { entityId: workoutPlan.id },
                   )}
                 >
                   Edit
                 </Text>
-                <Text style={styles.workoutOptText}>
+                <Text
+                  style={styles.workoutOptText}
+                  onPress={() => navigation.push(
+                    'RecordWorkout',
+                    { entityId: workoutPlan.id },
+                  )}
+                >
                   Start
                 </Text>
               </View>
             </>
           )}
         >
-          { workout.nickname || `Day ${key + 1}` }
+          { workoutPlan.nickname || `Day ${key + 1}` }
         </AccordionRow>
       ))}
       <Button

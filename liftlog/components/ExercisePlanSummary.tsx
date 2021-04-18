@@ -14,8 +14,8 @@ type Props = {
 };
 
 const ExercisePlanSummary: React.FC<Props> = ({ exercisePlan }: Props) => {
-  const summary = `${exercisePlan.lift.name} 
-    ${exercisePlan.sets}x${exercisePlan.reps}`;
+  const summary = `${exercisePlan.lift.name} \n`
+    + `${exercisePlan.sets}x${exercisePlan.reps}`;
 
   return (
     <View style={styles.container}>

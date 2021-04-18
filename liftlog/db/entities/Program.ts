@@ -17,7 +17,7 @@ export default class Program extends BaseEntity {
   name: string;
 
   @OneToMany('WorkoutPlan', 'program')
-  workouts: WorkoutPlan[];
+  workoutPlans: WorkoutPlan[];
 
   // TODO created / modified ts
 }
