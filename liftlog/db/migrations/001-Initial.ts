@@ -79,6 +79,18 @@ export default class Initial1616335747077 implements MigrationInterface {
           name: 'performed',
           type: 'integer',
         },
+        {
+          name: 'workoutPlanId',
+          type: 'integer',
+          isNullable: true,
+        },
+      ],
+      foreignKeys: [
+        {
+          columnNames: ['workoutPlanId'],
+          referencedTableName: 'workout_plan',
+          referencedColumnNames: ['id'],
+        },
       ],
     }), true);
 

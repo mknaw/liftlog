@@ -9,6 +9,7 @@ import {
 
 import ExercisePlan from './ExercisePlan';
 import Program from './Program';
+import Workout from './Workout';
 
 @Entity()
 export default class WorkoutPlan extends BaseEntity {
@@ -18,9 +19,12 @@ export default class WorkoutPlan extends BaseEntity {
   @Column({ nullable: true })
   nickname: string;
 
+  @ManyToOne('Program', 'workoutPlans')
+  program: Program;
+
   @OneToMany('ExercisePlan', 'workoutPlan')
   exercisePlans: ExercisePlan[];
 
-  @ManyToOne('Program', 'workoutPlans')
-  program: Program;
+  @OneToMany('Workout', 'workoutPlan')
+  workouts: Workout[];
 }

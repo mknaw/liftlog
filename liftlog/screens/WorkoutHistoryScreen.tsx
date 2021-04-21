@@ -19,12 +19,22 @@ type Props = {
 };
 
 const WorkoutHistoryScreen: React.FC<Props> = ({ navigation }: Props) => {
-  const workouts = useFetchEntities(Workout);
+  const workouts = useFetchEntities(
+    Workout,
+    { relations: ['workoutPlan', 'workoutPlan.program'] },
+  );
 
   return (
     <View style={styles.container}>
       {workouts && workouts.map((workout) => (
-        <Text>{DateUtils.displayDate(workout.performed)}</Text>
+        <View key={workout.id}>
+          <Text>
+            {DateUtils.displayDate(workout.performed)}
+          </Text>
+          {workout.workoutPlan && (
+            <Text>{workout.workoutPlan.program.name}</Text>
+          )}
+        </View>
       ))}
     </View>
   );

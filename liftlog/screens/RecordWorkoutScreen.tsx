@@ -5,6 +5,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   Button,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -12,7 +13,7 @@ import {
 } from 'react-native';
 
 import RepSlider from '../components/RepSlider';
-import WorkoutSummary from '../components/WorkoutSummary';
+import SetSummary from '../components/SetSummary';
 import Exercise from '../db/entities/Exercise';
 import ExercisePlan from '../db/entities/ExercisePlan';
 import Set from '../db/entities/Set';
@@ -38,31 +39,46 @@ type Props = {
   navigation: RecordWorkoutNavigationProp;
 };
 
+const useNewWorkout = (workoutPlan: WorkoutPlan | undefined) => {
+  // Initializes a new `workout` based on `WorkoutPlan`.
+  // Should only execute once, once `workoutPlan` retrieved.
+  const [workout, setWorkout] = useState<Workout>();
+
+  useEffect(() => {
+    const initializeWorkout = async () => {
+      const newWorkout = new Workout();
+      newWorkout.performed = DateUtils.currentUnixTS();
+      if (workoutPlan) {
+        newWorkout.workoutPlan = workoutPlan;
+      }
+      await newWorkout.save();
+      setWorkout(newWorkout);
+    };
+    if (workoutPlan && !workout) {
+      initializeWorkout();
+    }
+  }, [workoutPlan, workout]);
+
+  return workout;
+};
+
 const RecordWorkoutScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const { entityId } = route.params;
+
   const workoutPlan = useFetchEntity(
     WorkoutPlan,
     entityId,
     { relations: ['exercisePlans', 'exercisePlans.lift'] },
   );
+  const workout = useNewWorkout(workoutPlan);
 
-  const [workout, setWorkout] = useState<Workout>();
   const [exercise, setExercise] = useState<Exercise>();
   const [exercisePlanIdx, setExercisePlanIdx] = useState(0);
   const [exercisePlan, setExercisePlan] = useState<ExercisePlan>();
   const [reps, setReps] = useState(1);
   const [weight, setWeight] = useState<number>(0);
   const [setNumber, setSetNumber] = useState(1);
-
-  useEffect(() => {
-    const initializeWorkout = async () => {
-      const newWorkout = new Workout();
-      newWorkout.performed = DateUtils.currentUnixTS();
-      await newWorkout.save();
-      setWorkout(newWorkout);
-    };
-    initializeWorkout();
-  }, []);
+  const [sets, setSets] = useState<Array<Set>>([]);
 
   useEffect(() => {
     if (workoutPlan) {
@@ -106,13 +122,17 @@ const RecordWorkoutScreen: React.FC<Props> = ({ route, navigation }: Props) => {
     return null;
   }
 
-  const recordSet = () => {
+  const recordSet = async () => {
     if (exercise) {
       const thisSet = new Set();
       thisSet.exercise = exercise;
       thisSet.weight = weight;
       thisSet.reps = reps;
-      thisSet.save();
+      await thisSet.save();
+      setSets((prev) => {
+        prev.push(thisSet);
+        return prev;
+      });
     }
     if (setNumber >= exercisePlan.sets) {
       nextExercise();
@@ -154,7 +174,18 @@ const RecordWorkoutScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         title='Record Set'
         color='red'
       />
-      {workout && <WorkoutSummary workoutId={workout.id} />}
+      <View
+        style={{ height: 100 }}
+      >
+        <ScrollView
+          horizontal
+          style={styles.setContainer}
+        >
+          {sets.map((s) => (
+            <SetSummary sett={s} key={s.id} />
+          ))}
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -172,12 +203,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 4,
   },
-  picker: {
-    fontSize: 20,
-    padding: 5,
-    borderColor: 'red',
-    borderWidth: 1,
-    color: 'red',
+  setContainer: {
+    height: 1,
   },
 });
 
