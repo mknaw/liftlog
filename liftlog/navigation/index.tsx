@@ -5,11 +5,15 @@ import {
   DefaultTheme,
   DarkTheme,
 } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { ColorSchemeName } from 'react-native';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
+import { ColorSchemeName, View } from 'react-native';
 
 import ExercisePlanFormScreen from '../screens/ExercisePlanFormScreen';
 import HomeScreen from '../screens/HomeScreen';
+import LiftModalScreen from '../screens/modals/LiftModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import ProgramDetailScreen from '../screens/ProgramDetailScreen';
 import ProgramFormScreen from '../screens/ProgramFormScreen';
@@ -17,79 +21,117 @@ import ProgramListScreen from '../screens/ProgramListScreen';
 import RecordWorkoutScreen from '../screens/RecordWorkoutScreen';
 import WorkoutHistoryScreen from '../screens/WorkoutHistoryScreen';
 import WorkoutPlanDetailScreen from '../screens/WorkoutPlanDetailScreen';
-import { RootStackParamList } from '../types';
+import { MainStackParamList, RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
-// If you are not familiar with React Navigation, we recommend going through the
-// "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
-export default function Navigation({
-  colorScheme,
-}: { colorScheme: ColorSchemeName }) {
-  return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-    >
-      <RootNavigator />
-    </NavigationContainer>
-  );
+type NavigationProps = {
+  colorScheme: ColorSchemeName,
 }
 
-// A root stack navigator is often used for displaying modals on top of all
-// other content. Read more here: https://reactnavigation.org/docs/modal
-const Stack = createStackNavigator<RootStackParamList>();
+export default ({ colorScheme }: NavigationProps): React.ReactElement => (
+  <NavigationContainer
+    linking={LinkingConfiguration}
+    theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+  >
+    <RootNavigator />
+  </NavigationContainer>
+);
 
-function RootNavigator() {
+const MainStack = createStackNavigator<MainStackParamList>();
+
+function MainNavigator() {
   return (
-    <Stack.Navigator
+    <MainStack.Navigator
       initialRouteName='Home'
+      headerMode='float'
       screenOptions={{ headerShown: true }}
     >
-      <Stack.Screen
+      <MainStack.Screen
         name='Home'
         component={HomeScreen}
         options={{ title: 'LiftLog' }}
       />
-      <Stack.Screen
+      <MainStack.Screen
         name='ProgramList'
         component={ProgramListScreen}
         options={{ title: 'My Programs' }}
       />
-      <Stack.Screen
+      <MainStack.Screen
         name='ProgramForm'
         component={ProgramFormScreen}
         options={{ title: 'Add Program' }}
       />
-      <Stack.Screen
+      <MainStack.Screen
         name='ProgramDetail'
         component={ProgramDetailScreen}
         options={{ title: 'Program Builder' }}
       />
-      <Stack.Screen
+      <MainStack.Screen
         name='WorkoutPlanDetail'
         component={WorkoutPlanDetailScreen}
         options={{ title: 'This Workout Plan' }}
       />
-      <Stack.Screen
+      <MainStack.Screen
         name='ExercisePlanForm'
         component={ExercisePlanFormScreen}
         options={{ title: 'Add Exercise' }}
       />
-      <Stack.Screen
+      <MainStack.Screen
         name='RecordWorkout'
         component={RecordWorkoutScreen}
         options={{ title: 'Record Workout' }}
       />
-      <Stack.Screen
+      <MainStack.Screen
         name='WorkoutHistory'
         component={WorkoutHistoryScreen}
         options={{ title: 'Workout History' }}
       />
-      <Stack.Screen
+      <MainStack.Screen
         name='NotFound'
         component={NotFoundScreen}
         options={{ title: 'Oops!' }}
       />
-    </Stack.Navigator>
+    </MainStack.Navigator>
+  );
+}
+
+const RootStack = createStackNavigator<RootStackParamList>();
+
+function RootNavigator() {
+  return (
+    <RootStack.Navigator
+      mode='modal'
+      headerMode='none'
+      screenOptions={{
+        cardStyle: {
+          backgroundColor: 'transparent',
+        },
+        cardOverlayEnabled: true,
+        cardStyleInterpolator: ({ ...args }) => {
+          // All this work to have a simple dim overlay ...
+          const { current } = args;
+          const { progress } = current;
+          const style = CardStyleInterpolators.forVerticalIOS(args);
+          style.overlayStyle = {
+            opacity: progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 0.2],
+              extrapolate: 'clamp',
+            }),
+          };
+          return style;
+        },
+      }}
+    >
+      <RootStack.Screen
+        name='Main'
+        component={MainNavigator}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen
+        name='LiftModal'
+        component={LiftModalScreen}
+      />
+    </RootStack.Navigator>
   );
 }

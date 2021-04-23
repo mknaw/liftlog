@@ -5,7 +5,7 @@ import { BaseEntity, FindOneOptions } from 'typeorm';
 
 function useFetchEntity<T extends typeof BaseEntity>(
   entityType: T,
-  entityId: number,
+  entityId: number | undefined,
   extraFindOptions?: FindOneOptions,
   fetchOnFocus = true,
 ): InstanceType<T> | undefined {
@@ -24,7 +24,7 @@ function useFetchEntity<T extends typeof BaseEntity>(
         setEntity(fetchedEntity);
       }
     };
-    if (!entity) {
+    if (!entity && entityId) {
       fetch();
     }
   }, [entity, entityType, entityId, extraFindOptions]);

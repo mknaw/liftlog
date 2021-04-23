@@ -12,10 +12,10 @@ import TextRow from '../components/TextRow';
 import Program from '../db/entities/Program';
 import useFetchEntities from '../hooks/useFetchEntities';
 import { BaseStyles } from '../styles';
-import { RootStackParamList } from '../types';
+import { MainStackParamList } from '../types';
 
 type ProgramListScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
+  MainStackParamList,
   'ProgramList'
 >;
 

@@ -11,10 +11,10 @@ import {
 import TextInputRow from '../components/TextInputRow';
 import Program from '../db/entities/Program';
 import { BaseStyles, FormStyles } from '../styles';
-import { RootStackParamList } from '../types';
+import { MainStackParamList } from '../types';
 
 type ProgramFormScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
+  MainStackParamList,
   'ProgramForm'
 >;
 

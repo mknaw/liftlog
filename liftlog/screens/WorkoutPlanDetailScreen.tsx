@@ -10,15 +10,15 @@ import TextInputRow from '../components/TextInputRow';
 import WorkoutPlan from '../db/entities/WorkoutPlan';
 import useFetchEntity from '../hooks/useFetchEntity';
 import { BaseStyles } from '../styles';
-import { RootStackParamList } from '../types';
+import { MainStackParamList } from '../types';
 
 type WorkoutPlanDetailRouteProp = RouteProp<
-  RootStackParamList,
+  MainStackParamList,
   'WorkoutPlanDetail'
 >;
 
 type WorkoutPlanDetailNavigationProp = StackNavigationProp<
-  RootStackParamList,
+  MainStackParamList,
   'WorkoutPlanDetail'
 >;
 

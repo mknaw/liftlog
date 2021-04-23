@@ -16,15 +16,15 @@ import Program from '../db/entities/Program';
 import WorkoutPlan from '../db/entities/WorkoutPlan';
 import useFetchEntity from '../hooks/useFetchEntity';
 import { TextStyles } from '../styles';
-import { RootStackParamList } from '../types';
+import { MainStackParamList } from '../types';
 
 type ProgramDetailRouteProp = RouteProp<
-  RootStackParamList,
+  MainStackParamList,
   'ProgramDetail'
 >;
 
 type ProgramDetailNavigationProp = StackNavigationProp<
-  RootStackParamList,
+  MainStackParamList,
   'ProgramDetail'
 >;
 

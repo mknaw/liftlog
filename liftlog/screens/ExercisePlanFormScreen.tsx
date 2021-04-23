@@ -1,27 +1,36 @@
 import React from 'react';
 
-import { RouteProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useForm } from 'react-hook-form';
-import { Button, StyleSheet, View } from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-import LiftPicker from '../components/LiftPicker';
 import TextInputRow from '../components/TextInputRow';
 import ExercisePlan from '../db/entities/ExercisePlan';
 import Lift from '../db/entities/Lift';
 import WorkoutPlan from '../db/entities/WorkoutPlan';
-import { BaseStyles } from '../styles';
-import { RootStackParamList } from '../types';
+import useFetchEntity from '../hooks/useFetchEntity';
+import { BaseStyles, TextStyles } from '../styles';
+import { MainStackParamList, RootStackParamList } from '../types';
 import { FormUtils } from '../utils';
 
 type ExercisePlanFormRouteProp = RouteProp<
-  RootStackParamList,
+  MainStackParamList,
   'ExercisePlanForm'
 >;
 
-type ExercisePlanFormNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'ExercisePlanForm'
+type ExercisePlanFormNavigationProp = CompositeNavigationProp<
+ StackNavigationProp<MainStackParamList>,
+ StackNavigationProp<
+   RootStackParamList,
+   'Main'
+ >
 >;
 
 type Props = {
@@ -41,9 +50,13 @@ const ExercisePlanFormScreen: React.FC<Props> = ({
   route,
   navigation,
 }: Props) => {
-  const { workoutPlanId } = route.params;
-
+  const { workoutPlanId, selectedLiftId } = route.params;
   const { control, handleSubmit, errors } = useForm<Inputs>();
+
+  const selectedLift = useFetchEntity(
+    Lift,
+    selectedLiftId,
+  );
 
   async function newExercisePlan(data: Inputs) {
     // TODO surely there must be a way to assign FK by ID?
@@ -64,6 +77,13 @@ const ExercisePlanFormScreen: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('LiftModal')}
+      >
+        <Text style={styles.text}>
+          {selectedLift ? selectedLift.name : 'Pick Lift'}
+        </Text>
+      </TouchableOpacity>
       <TextInputRow
         name='weight'
         control={control}
@@ -118,10 +138,6 @@ const ExercisePlanFormScreen: React.FC<Props> = ({
         errors={errors}
         keyboardType='numeric'
       />
-      <LiftPicker
-        name='lift'
-        control={control}
-      />
       <Button
         title='Add Exercise'
         onPress={handleSubmit(async (data) => {
@@ -139,7 +155,7 @@ const styles = StyleSheet.create({
     ...BaseStyles.container,
   },
   text: {
-    fontSize: 20,
+    ...TextStyles.medium,
   },
   btn: {
     margin: 20,

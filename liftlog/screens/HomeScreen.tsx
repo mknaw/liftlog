@@ -4,10 +4,10 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Button, StyleSheet, View } from 'react-native';
 
 import { BaseStyles } from '../styles';
-import { RootStackParamList } from '../types';
+import { MainStackParamList } from '../types';
 
 type HomeScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
+  MainStackParamList,
   'Home'
 >;
 

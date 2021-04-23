@@ -21,16 +21,16 @@ import Workout from '../db/entities/Workout';
 import WorkoutPlan from '../db/entities/WorkoutPlan';
 import useFetchEntity from '../hooks/useFetchEntity';
 import { BaseStyles, TextStyles } from '../styles';
-import { RootStackParamList } from '../types';
+import { MainStackParamList } from '../types';
 import { DateUtils } from '../utils';
 
 type RecordWorkoutRouteProp = RouteProp<
-  RootStackParamList,
+  MainStackParamList,
   'RecordWorkout'
 >;
 
 type RecordWorkoutNavigationProp = StackNavigationProp<
-  RootStackParamList,
+  MainStackParamList,
   'RecordWorkout'
 >;
 

@@ -6,11 +6,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import Workout from '../db/entities/Workout';
 import useFetchEntities from '../hooks/useFetchEntities';
 import { BaseStyles } from '../styles';
-import { RootStackParamList } from '../types';
+import { MainStackParamList } from '../types';
 import { DateUtils } from '../utils';
 
 type WorkoutHistoryScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
+  MainStackParamList,
   'WorkoutHistory'
 >;
 
