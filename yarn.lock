@@ -1173,6 +1173,11 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@expo-google-fonts/orbitron@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/orbitron/-/orbitron-0.1.0.tgz#17cc2608f563f4ccd2af5e8eb968ff9bb8a0902a"
+  integrity sha512-wR6gQHdvux6wb+As8r+9TF9MLaR9E6+5DYddjtNaRgDlaPH8ssG/Ib8DkKF0xVHAO84yG13abMN5HzHW2r+dYA==
+
 "@expo/config-plugins@1.0.20":
   version "1.0.20"
   resolved "https://registry.npmjs.org/@expo/config-plugins/-/config-plugins-1.0.20.tgz"

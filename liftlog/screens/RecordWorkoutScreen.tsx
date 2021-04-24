@@ -9,11 +9,13 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
 import RepSlider from '../components/RepSlider';
 import SetSummary from '../components/SetSummary';
+import Timer from '../components/Timer';
 import Exercise from '../db/entities/Exercise';
 import ExercisePlan from '../db/entities/ExercisePlan';
 import Set from '../db/entities/Set';
@@ -79,6 +81,8 @@ const RecordWorkoutScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   const [weight, setWeight] = useState<number>(0);
   const [setNumber, setSetNumber] = useState(1);
   const [sets, setSets] = useState<Array<Set>>([]);
+  const [timerOn, setTimerOn] = useState<boolean>(false);
+  const [time, setTime] = useState<number>(0);
 
   useEffect(() => {
     if (workoutPlan) {
@@ -118,11 +122,9 @@ const RecordWorkoutScreen: React.FC<Props> = ({ route, navigation }: Props) => {
     setExercisePlanIdx((prev) => prev + 1);
   };
 
-  if (!workoutPlan || !exercisePlan) {
-    return null;
-  }
-
   const recordSet = async () => {
+    setTimerOn(true);
+    setTime(0);
     if (exercise) {
       const thisSet = new Set();
       thisSet.exercise = exercise;
@@ -134,13 +136,27 @@ const RecordWorkoutScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         return prev;
       });
     }
-    if (setNumber >= exercisePlan.sets) {
+    if (exercisePlan && setNumber >= exercisePlan.sets) {
       nextExercise();
       setSetNumber(1);
     } else {
       setSetNumber(setNumber + 1);
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!timerOn || time === undefined) {
+        return;
+      }
+      setTime((prev) => (prev + 1));
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [timerOn, time]);
+
+  if (!workoutPlan || !exercisePlan) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -149,6 +165,7 @@ const RecordWorkoutScreen: React.FC<Props> = ({ route, navigation }: Props) => {
       </Text>
       <View style={{ flexDirection: 'row' }}>
         <TextInput
+          style={styles.goal}
           value={weight.toString()}
           keyboardType='numeric'
           onChangeText={(value) => setWeight(parseInt(value, 10))}
@@ -174,6 +191,16 @@ const RecordWorkoutScreen: React.FC<Props> = ({ route, navigation }: Props) => {
         title='Record Set'
         color='red'
       />
+      <View
+        style={{ flexDirection: 'row' }}
+      >
+        <TouchableOpacity
+          style={{ marginLeft: 5 }}
+          onPress={() => setTimerOn((prev) => !prev)}
+        >
+          <Timer time={time} />
+        </TouchableOpacity>
+      </View>
       <View
         style={{ height: 100 }}
       >
