@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -36,7 +36,7 @@ const WorkoutPlanDetailScreen: React.FC<Props> = ({
   navigation,
 }: Props) => {
   const { entityId } = route.params;
-  const entity = useFetchEntity(
+  const workoutPlan = useFetchEntity(
     WorkoutPlan,
     entityId,
     { relations: ['exercisePlans', 'exercisePlans.lift'] },
@@ -44,62 +44,64 @@ const WorkoutPlanDetailScreen: React.FC<Props> = ({
 
   const { control, handleSubmit, errors } = useForm<Inputs>();
 
-  useEffect(() => {
-    if (!entity) {
-      return;
-    }
-    navigation.addListener('beforeRemove', async () => {
-      // TODO this concept of discarding changes has to be more broad
-      if (!entity.exercisePlans.length) {
-        // await WorkoutPlan.delete(entity.id);
-      }
-    });
-  }, [entity, navigation, handleSubmit]);
-
   const onSaveWorkoutPlan = () => {
-    if (!entity) {
+    if (!workoutPlan) {
       return;
     }
     handleSubmit(async (data) => {
       const { nickname } = data;
       if (nickname) {
-        entity.nickname = nickname;
-        await entity.save();
+        workoutPlan.nickname = nickname;
+        await workoutPlan.save();
       }
       navigation.pop();
     })();
   };
 
-  if (!entity) {
+  const onDiscardWorkoutPlan = () => {
+    if (workoutPlan) {
+      // TODO doesn't actually cascade delete ExercisePlans
+      WorkoutPlan.delete(workoutPlan.id).finally(() => navigation.pop());
+    }
+  };
+
+  if (!workoutPlan) {
     return null;
   }
   return (
     <View style={styles.container}>
       <TextInputRow
         name='nickname'
-        defaultValue={entity.nickname}
+        defaultValue={workoutPlan.nickname}
         placeholder='Day X'
         control={control}
         errors={errors}
       />
-      {entity.exercisePlans && entity.exercisePlans.map((exercisePlan) => (
-        <ExercisePlanSummary
-          key={exercisePlan.id}
-          exercisePlan={exercisePlan}
-        />
-      ))}
+      {workoutPlan.exercisePlans && workoutPlan.exercisePlans.map(
+        (exercisePlan) => (
+          <ExercisePlanSummary
+            key={exercisePlan.id}
+            exercisePlan={exercisePlan}
+          />
+        ),
+      )}
       <Button
         title='Add Exercise'
         onPress={() => {
           navigation.navigate(
             'ExercisePlanForm',
-            { workoutPlanId: entity.id },
+            { workoutPlanId: workoutPlan.id },
           );
         }}
       />
       <Button
         title='Save Workout Plan'
         onPress={onSaveWorkoutPlan}
+      />
+      {/* TODO only show if new? */}
+      <Button
+        title='Discard Workout Plan'
+        onPress={onDiscardWorkoutPlan}
       />
     </View>
   );

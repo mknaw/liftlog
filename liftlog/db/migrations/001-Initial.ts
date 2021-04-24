@@ -151,6 +151,7 @@ export default class Initial1616335747077 implements MigrationInterface {
           columnNames: ['workoutPlanId'],
           referencedTableName: 'workout_plan',
           referencedColumnNames: ['id'],
+          onDelete: 'CASCADE',
         },
         {
           columnNames: ['liftId'],

@@ -23,7 +23,7 @@ export default class ExercisePlan extends BaseEntity {
   @Column('int')
   sets: number;
 
-  @ManyToOne('WorkoutPlan', 'exercisePlans')
+  @ManyToOne('WorkoutPlan', 'exercisePlans', { onDelete: 'CASCADE' })
   workoutPlan: WorkoutPlan;
 
   @ManyToOne('Lift', 'exercisePlans')

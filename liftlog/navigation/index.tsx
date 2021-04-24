@@ -9,7 +9,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import { ColorSchemeName, View } from 'react-native';
+import { ColorSchemeName } from 'react-native';
 
 import ExercisePlanFormScreen from '../screens/ExercisePlanFormScreen';
 import HomeScreen from '../screens/HomeScreen';
@@ -69,7 +69,10 @@ function MainNavigator() {
       <MainStack.Screen
         name='WorkoutPlanDetail'
         component={WorkoutPlanDetailScreen}
-        options={{ title: 'This Workout Plan' }}
+        options={{
+          title: 'This Workout Plan',
+          headerLeft: () => null,
+        }}
       />
       <MainStack.Screen
         name='ExercisePlanForm'

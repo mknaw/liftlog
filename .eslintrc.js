@@ -24,6 +24,8 @@ module.exports = {
   },
   rules: {
     'max-len': ['error', { code: 80 }],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': ['error'],
     'jsx-quotes': ['error', 'prefer-single'],
     'padded-blocks': 'off',
     'no-use-before-define': 'off',

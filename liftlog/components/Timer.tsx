@@ -40,9 +40,11 @@ const Timer: React.FC<Props> = ({ time }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
     width: 180,
   },
   text: {
+    // TODO not actually monospaced...
     fontFamily: 'Orbitron_700Bold',
     fontSize: 50,
   },

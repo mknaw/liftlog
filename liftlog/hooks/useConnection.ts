@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import * as SQLite from 'expo-sqlite';
 import { Connection, createConnection } from 'typeorm';
 
 import Exercise from '../db/entities/Exercise';
@@ -16,9 +17,10 @@ export default function useConnection(): void {
 
   const connect = React.useCallback(async () => {
     // TODO how to get this to actually read the config
+    const database = 'liftlog.db';
     const createdConnection = await createConnection({
       type: 'expo',
-      database: 'liftlog.db',
+      database,
       // eslint-disable-next-line
       driver: require('expo-sqlite'),
       // TODO how the fuck to get this to load all from dir
@@ -36,8 +38,13 @@ export default function useConnection(): void {
       migrationsRun: true,
 
       synchronize: false,
-      logging: false, // TODO set based on dev mode?
+      logging: true, // TODO set based on dev mode?
     });
+
+    // Need to do this for FKs to work correctly I guess (e.g. cascades).
+    SQLite.openDatabase(database).exec(
+      [{ sql: 'PRAGMA foreign_keys = ON;', args: [] }], false, () => null,
+    );
 
     setConnection(createdConnection);
   }, []);

@@ -61,13 +61,12 @@ const ExercisePlanFormScreen: React.FC<Props> = ({
   async function newExercisePlan(data: Inputs) {
     // TODO surely there must be a way to assign FK by ID?
     const workoutPlan = await WorkoutPlan.findOne(workoutPlanId);
-    const lift = await Lift.findOne(data.lift);
-    if (!workoutPlan || !lift) {
+    if (!selectedLift || !workoutPlan) {
       return;
     }
     const exercisePlan = new ExercisePlan();
     exercisePlan.workoutPlan = workoutPlan;
-    exercisePlan.lift = lift;
+    exercisePlan.lift = selectedLift;
     // TODO these should be coerced to number by input or hook-form
     exercisePlan.weight = Number(data.weight);
     exercisePlan.sets = Number(data.sets);
@@ -138,13 +137,15 @@ const ExercisePlanFormScreen: React.FC<Props> = ({
         errors={errors}
         keyboardType='numeric'
       />
-      <Button
-        title='Add Exercise'
-        onPress={handleSubmit(async (data) => {
-          await newExercisePlan(data);
-          navigation.pop();
-        })}
-      />
+      {selectedLift && (
+        <Button
+          title='Add Exercise'
+          onPress={handleSubmit(async (data) => {
+            await newExercisePlan(data);
+            navigation.pop();
+          })}
+        />
+      )}
     </View>
   );
 };

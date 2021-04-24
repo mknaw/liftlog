@@ -27,7 +27,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }: Props) => (
     />
     <Button
       title='Settings'
-      onPress={() => {}}
+      onPress={() => null}
     />
   </View>
 );

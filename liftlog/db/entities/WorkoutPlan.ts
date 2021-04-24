@@ -22,7 +22,7 @@ export default class WorkoutPlan extends BaseEntity {
   @ManyToOne('Program', 'workoutPlans')
   program: Program;
 
-  @OneToMany('ExercisePlan', 'workoutPlan')
+  @OneToMany('ExercisePlan', 'workoutPlan', { onDelete: 'CASCADE' })
   exercisePlans: ExercisePlan[];
 
   @OneToMany('Workout', 'workoutPlan')
