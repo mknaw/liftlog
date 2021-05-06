@@ -16,7 +16,6 @@ export default function useConnection(): void {
   const [connection, setConnection] = React.useState<Connection | null>(null);
 
   const connect = React.useCallback(async () => {
-    // TODO how to get this to actually read the config
     const database = 'liftlog.db';
     const createdConnection = await createConnection({
       type: 'expo',

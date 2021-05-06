@@ -70,6 +70,7 @@ const WorkoutPlanDetailScreen: React.FC<Props> = ({
   }
   return (
     <View style={styles.container}>
+      {/* TODO would be good to preserve the entered text here on return */}
       <TextInputRow
         name='nickname'
         defaultValue={workoutPlan.nickname}

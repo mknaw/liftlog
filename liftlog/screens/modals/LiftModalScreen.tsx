@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -6,6 +6,7 @@ import {
   FlatList,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -53,6 +54,33 @@ const LiftListItem = ({ item, navigation }: LiftListItemProps) => {
 // TODO should split out a base modal
 const LiftModalScreen: React.FC<Props> = ({ navigation }: Props) => {
   const lifts = useFetchEntities(Lift);
+  const [filteredLifts, setFilteredLifts] = useState<Array<Lift>>([]);
+  const [searchText, onChangeSearchText] = useState<string>();
+
+  useEffect(() => {
+    if (!lifts) {
+      return;
+    }
+    const liftFilter = ((thisLift: Lift) => (
+      searchText
+        ? thisLift.name.toLowerCase().includes(searchText.toLowerCase())
+        : true
+    ));
+    setFilteredLifts(lifts.filter(liftFilter));
+  }, [lifts, searchText]);
+
+  const onAddLiftPress = async () => {
+    if (!searchText) {
+      return;
+    }
+    const newLift = new Lift();
+    newLift.name = searchText;
+    await newLift.save();
+    navigation.navigate(
+      'ExercisePlanForm',
+      { selectedLiftId: newLift.id },
+    );
+  };
 
   if (!lifts) {
     return null;
@@ -67,16 +95,34 @@ const LiftModalScreen: React.FC<Props> = ({ navigation }: Props) => {
       }}
     >
       <View style={styles.container}>
-        <FlatList
-          data={lifts}
-          renderItem={({ item }) => (
-            <LiftListItem
-              item={item}
-              navigation={navigation}
-            />
-          )}
-          keyExtractor={(item) => `${item.id}`}
+        <TextInput
+          style={[styles.textInput, styles.midlight]}
+          placeholder='Search'
+          onChangeText={onChangeSearchText}
         />
+        {filteredLifts.length
+          ? (
+            <FlatList
+              data={filteredLifts}
+              renderItem={({ item }) => (
+                <LiftListItem
+                  item={item}
+                  navigation={navigation}
+                />
+              )}
+              keyExtractor={(item) => `${item.id}`}
+            />
+          )
+          : (
+            <TouchableOpacity
+              style={styles.addLift}
+              onPress={onAddLiftPress}
+            >
+              <Text style={[styles.text, styles.midlight, { color: 'black' }]}>
+                Add to lifts
+              </Text>
+            </TouchableOpacity>
+          )}
       </View>
     </View>
   );
@@ -94,6 +140,16 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingVertical: 5,
     ...TextStyles.medium,
+  },
+  midlight: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
+  textInput: {
+    paddingVertical: 5,
+    ...TextStyles.medium,
+  },
+  addLift: {
+    marginVertical: 10,
   },
 });
 
